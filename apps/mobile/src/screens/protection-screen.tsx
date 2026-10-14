@@ -1,21 +1,24 @@
 import { router } from 'expo-router';
-import { View } from 'react-native';
-import { GroupedRow } from '@/components/grouped-row';
+import { Pressable, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { N0Symbol } from '@/components/n0-symbol';
 import { N0Text } from '@/components/n0-text';
 import { Screen } from '@/components/screen';
 import { StatusPill } from '@/components/status-pill';
 import { Surface } from '@/components/surface';
+import { VendorIcon } from '@/components/vendor-icon';
 import { protectionModules } from '@/domain/protection';
-import { colors, radius, spacing } from '@/theme';
+import { colors, spacing } from '@/theme';
 
-const iconFor = (id: string) => id === 'safari' ? 'safari' as const : id === 'sms' ? 'message.fill' as const : id === 'network' ? 'network' as const : 'envelope.fill' as const;
+const vendorFor = (id: string) => id as 'gmail' | 'outlook' | 'safari' | 'chrome' | 'sms' | 'network';
 
 export default function ProtectionScreen() {
-  return <Screen>
-    <View style={{ alignItems: 'center', gap: 4, paddingTop: spacing.sm }}><View style={{ width: 46, height: 46, borderRadius: radius.full, backgroundColor: colors.brandWash, borderWidth: 1, borderColor: colors.brand, alignItems: 'center', justifyContent: 'center' }}><N0Symbol name="shield.lefthalf.filled" size={24} /></View><N0Text variant="title">Koruma Merkezi</N0Text><N0Text variant="small" style={{ textAlign: 'center' }}>Kanallarını bağla, izinleri ve kapsamı tek yerden gör.</N0Text></View>
-    <Surface style={{ padding: 0 }}>{protectionModules.map((module, index) => <GroupedRow key={module.id} icon={iconFor(module.id)} title={module.name} detail={module.summary} last={index === protectionModules.length - 1} onPress={() => router.push({ pathname: '/module/[id]', params: { id: module.id } })} trailing={<StatusPill tone={module.state === 'NOT_SUPPORTED' ? 'danger' : 'neutral'} label={module.state === 'NOT_SUPPORTED' ? 'Yakında' : 'Bağla'} />} />)}</Surface>
-    <View style={{ gap: 8 }}><N0Text variant="caption">AİLE KORUMASI</N0Text><Surface style={{ padding: 0 }}><GroupedRow icon="person.2.fill" title="Aile Koruması" detail="Yakınların için ortak koruma alanı." last trailing={<StatusPill tone="neutral" label="Yakında" />} /></Surface></View>
-    <N0Text variant="caption" style={{ textAlign: 'center' }}>Bir kanal canlı sağlık kontrolünden geçmeden “aktif” gösterilmez.</N0Text>
+  const insets = useSafeAreaInsets();
+  const goBack = () => router.canGoBack() ? router.back() : router.replace('/');
+  return <Screen contentContainerStyle={{ paddingTop: insets.top + 8, gap: 10 }}>
+    <View style={{ minHeight: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}><Pressable onPress={goBack} hitSlop={12} accessibilityRole="button" accessibilityLabel="Geri" style={{ position: 'absolute', left: 0 }}><N0Symbol name="arrow.left" size={26} tintColor={colors.text} /></Pressable><N0Text variant="title">Koruma Merkezi</N0Text></View>
+    <View style={{ gap: 0 }}>{protectionModules.map((module, index) => <Pressable key={module.id} onPress={() => router.push({ pathname: '/module/[id]', params: { id: module.id } })} style={({ pressed }) => ({ opacity: pressed ? 0.68 : 1, marginTop: index === 0 ? 0 : -1 })}><Surface style={{ minHeight: 79, borderRadius: index === 0 || index === protectionModules.length - 1 ? 16 : 12, flexDirection: 'row', alignItems: 'center', gap: 14, paddingHorizontal: 16 }}><VendorIcon vendor={vendorFor(module.id)} size={48} /><View style={{ flex: 1, gap: 3 }}><N0Text variant="headline" style={{ fontSize: 14 }}>{module.name === 'Ağ Koruması' ? 'Ağ Koruması (VPN)' : module.name === 'Mesaj Koruması' ? 'Mesaj Koruması (SMS)' : module.name}</N0Text><N0Text variant="small">{module.id === 'gmail' || module.id === 'outlook' ? 'E-posta taraması' : module.id === 'sms' ? 'Şüpheli mesajları analiz eder' : module.id === 'network' ? 'Zararlı siteleri engeller' : 'Tarayıcı uzantısı'}</N0Text></View><StatusPill tone={module.state === 'NOT_SUPPORTED' ? 'warning' : 'neutral'} label={module.id === 'sms' ? 'Yapılandır' : module.state === 'NOT_SUPPORTED' ? 'Yakında' : 'Bağla'} /></Surface></Pressable>)}</View>
+    <Pressable onPress={() => router.push('/pro')} style={({ pressed }) => ({ opacity: pressed ? 0.68 : 1, paddingTop: spacing.sm })}><Surface style={{ minHeight: 106, flexDirection: 'row', alignItems: 'center', gap: 17, paddingHorizontal: 20 }}><N0Symbol name="person.2.fill" size={41} /><View style={{ flex: 1, gap: 5 }}><N0Text variant="headline" style={{ fontSize: 15 }}>Aile Koruması</N0Text><N0Text variant="small" style={{ fontSize: 12 }}>Sevdiklerinizin de güvende olmasına yardımcı olun.</N0Text></View><N0Symbol name="chevron.right" size={18} tintColor={colors.text} /></Surface></Pressable>
+    <N0Text variant="caption" style={{ textAlign: 'center', paddingTop: 2 }}>Modüller canlı doğrulama olmadan aktif gösterilmez.</N0Text>
   </Screen>;
 }

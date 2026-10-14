@@ -1,28 +1,28 @@
 import { router } from 'expo-router';
-import { View } from 'react-native';
-import { GroupedRow } from '@/components/grouped-row';
+import { Pressable, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { N0Symbol } from '@/components/n0-symbol';
 import { N0Text } from '@/components/n0-text';
 import { Screen } from '@/components/screen';
-import { StatusPill } from '@/components/status-pill';
 import { Surface } from '@/components/surface';
-import { colors, radius, spacing } from '@/theme';
+import { colors, radius } from '@/theme';
 
 const rows = [
-  { id: 'account', title: 'Hesap', detail: 'Profil ve hesap işlemleri', icon: 'person.crop.circle.fill' as const },
-  { id: 'connections', title: 'Bağlı Hesaplar', detail: 'E-posta ve tarayıcı bağlantıları', icon: 'link' as const },
-  { id: 'privacy', title: 'Gizlilik ve Veri', detail: 'İzinler, saklama ve veri kullanımı', icon: 'hand.raised.fill' as const },
-  { id: 'notifications', title: 'Bildirimler', detail: 'Uyarı tercihleri', icon: 'bell.fill' as const },
-  { id: 'language', title: 'Dil', detail: 'Türkçe', icon: 'globe' as const },
-  { id: 'appearance', title: 'Görünüm', detail: 'Koyu tema', icon: 'moon.fill' as const },
-  { id: 'support', title: 'Destek', detail: 'Yardım ve geri bildirim', icon: 'questionmark.circle.fill' as const },
-  { id: 'about', title: 'Hakkında', detail: 'n0scam iOS geliştirme sürümü', icon: 'info.circle.fill' as const },
+  { id: 'subscription', title: 'Hesap ve Abonelik', detail: 'Ücretsiz geliştirme sürümü', icon: 'person.crop.square' as const, route: '/pro' as const },
+  { id: 'connections', title: 'Bağlı Hesaplar', icon: 'person.2.fill' as const, route: '/protection' as const },
+  { id: 'privacy', title: 'Gizlilik ve Güvenlik', icon: 'lock.shield.fill' as const, route: '/privacy' as const },
+  { id: 'notifications', title: 'Bildirim Ayarları', icon: 'bell.fill' as const, route: null },
+  { id: 'language', title: 'Uygulama Dili', value: 'Türkçe', icon: 'globe' as const, route: null },
+  { id: 'appearance', title: 'Tema', value: 'Koyu', icon: 'paintpalette.fill' as const, route: null },
+  { id: 'support', title: 'Destek', icon: 'questionmark.circle.fill' as const, route: null },
+  { id: 'about', title: 'Hakkında', icon: 'info.circle.fill' as const, route: null },
 ];
 
 export default function SettingsScreen() {
-  return <Screen>
-    <View style={{ gap: 3, paddingTop: spacing.sm }}><N0Text variant="title">Ayarlar</N0Text><N0Text variant="small">Hesap, gizlilik ve uygulama tercihleri</N0Text></View>
-    <Surface style={{ padding: 0 }}><GroupedRow icon="person.crop.circle.fill" title="n0scam Kullanıcısı" detail="Yerel geliştirme profili" onPress={() => router.push({ pathname: '/setting/[id]', params: { id: 'account' } })} trailing={<View style={{ width: 29, height: 29, borderRadius: radius.full, backgroundColor: colors.brandMuted, alignItems: 'center', justifyContent: 'center' }}><N0Text variant="headline" style={{ color: colors.brand }}>N</N0Text></View>} />{rows.map((row, index) => <GroupedRow key={row.title} icon={row.icon} title={row.title} detail={row.detail} last={index === rows.length - 1} onPress={() => row.id === 'connections' ? router.push('/protection') : row.id === 'privacy' ? router.push('/privacy') : router.push({ pathname: '/setting/[id]', params: { id: row.id } })} />)}</Surface>
-    <Surface style={{ padding: 0 }}><GroupedRow icon="crown.fill" title="n0scam Pro" detail="Gelişmiş koruma özellikleri" last onPress={() => router.push('/pro')} trailing={<StatusPill tone="brand" label="Yakında" />} /></Surface>
-    <N0Text variant="caption" style={{ textAlign: 'center' }}>Sürüm 1.0.0 • iOS geliştirme yapısı</N0Text>
+  const insets = useSafeAreaInsets();
+  return <Screen contentContainerStyle={{ paddingTop: insets.top + 12, gap: 9 }}>
+    <N0Text variant="title" style={{ fontSize: 27, paddingBottom: 4 }}>Ayarlar</N0Text>
+    <Pressable onPress={() => router.push({ pathname: '/setting/[id]', params: { id: 'account' } })} style={({ pressed }) => ({ opacity: pressed ? 0.65 : 1 })}><Surface style={{ minHeight: 83, flexDirection: 'row', alignItems: 'center', gap: 15, paddingHorizontal: 15 }}><View style={{ width: 55, height: 55, borderRadius: radius.full, backgroundColor: '#4C5350', alignItems: 'center', justifyContent: 'center' }}><N0Text variant="title" style={{ fontFamily: 'Sora_400Regular', fontSize: 23 }}>K</N0Text></View><View style={{ flex: 1, gap: 2 }}><N0Text variant="headline" style={{ fontSize: 14 }}>Kullanıcı</N0Text><N0Text variant="small">Hesap bilgisi bağlı değil</N0Text></View><N0Symbol name="chevron.right" size={16} tintColor={colors.text} /></Surface></Pressable>
+    {rows.map((row) => <Pressable key={row.id} onPress={() => row.route ? router.push(row.route) : router.push({ pathname: '/setting/[id]', params: { id: row.id } })} style={({ pressed }) => ({ opacity: pressed ? 0.65 : 1 })}><Surface style={{ minHeight: 67, flexDirection: 'row', alignItems: 'center', gap: 14, paddingHorizontal: 14 }}><View style={{ width: 43, height: 43, borderRadius: radius.full, backgroundColor: colors.surfaceRaised, borderWidth: 1, borderColor: '#2A3733', alignItems: 'center', justifyContent: 'center' }}><N0Symbol name={row.icon} size={21} tintColor={colors.text} /></View><View style={{ flex: 1, gap: 2 }}><N0Text variant="headline" style={{ fontSize: 13.5 }}>{row.title}</N0Text>{row.detail ? <N0Text variant="small">{row.detail}</N0Text> : null}</View>{row.value ? <N0Text variant="small" style={{ color: colors.textSecondary }}>{row.value}</N0Text> : null}<N0Symbol name="chevron.right" size={15} tintColor={colors.text} /></Surface></Pressable>)}
   </Screen>;
 }

@@ -1,25 +1,20 @@
 import { useState } from 'react';
 import { Pressable, View } from 'react-native';
-import { GroupedRow } from '@/components/grouped-row';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { N0Symbol } from '@/components/n0-symbol';
 import { N0Text } from '@/components/n0-text';
 import { Screen } from '@/components/screen';
-import { StatusPill } from '@/components/status-pill';
 import { Surface } from '@/components/surface';
-import { colors, spacing } from '@/theme';
+import { colors, radius } from '@/theme';
 
-const samples = [
-  { icon: 'link' as const, title: 'Şüpheli bağlantı örneği', detail: 'Bugün, 14:32 • Yüksek risk', tone: 'danger' as const, label: 'DEMO', group: 'Riskli' },
-  { icon: 'text.bubble.fill' as const, title: 'Teslimat mesajı örneği', detail: 'Dün, 18:05 • Dikkat', tone: 'danger' as const, label: 'DEMO', group: 'Riskli' },
-  { icon: 'qrcode.viewfinder' as const, title: 'Etkinlik QR örneği', detail: '12 Eki, 09:41 • Doğrulanamadı', tone: 'neutral' as const, label: 'DEMO', group: 'Güvenli' },
-];
+const filters = ['Tümü', 'Link', 'QR', 'Mesaj', 'E-posta'] as const;
 
 export default function HistoryScreen() {
-  const [filter, setFilter] = useState('Tümü');
-  const visibleSamples = filter === 'Tümü' ? samples : samples.filter((item) => item.group === filter);
-  return <Screen>
-    <View style={{ gap: 3, paddingTop: spacing.sm }}><N0Text variant="title">Geçmiş</N0Text><N0Text variant="small">Saklamayı seçtiğin analizler burada görünür.</N0Text></View>
-    <View style={{ flexDirection: 'row', gap: 6 }}>{['Tümü', 'Riskli', 'Güvenli'].map((label) => <Pressable key={label} onPress={() => setFilter(label)} accessibilityRole="button" accessibilityState={{ selected: filter === label }} style={({ pressed }) => ({ paddingHorizontal: 12, paddingVertical: 6, borderRadius: 999, borderWidth: 1, borderColor: filter === label ? colors.brand : colors.separator, backgroundColor: filter === label ? colors.brandWash : colors.surface, opacity: pressed ? 0.65 : 1 })}><N0Text variant="caption" style={{ color: filter === label ? colors.brand : colors.textSecondary }}>{label}</N0Text></Pressable>)}</View>
-    <View style={{ gap: 8 }}><N0Text variant="caption">TASARIM ÖNİZLEMESİ — GERÇEK KAYIT DEĞİL</N0Text><Surface style={{ padding: 0 }}>{visibleSamples.map((item, index) => <GroupedRow key={item.title} icon={item.icon} iconTone={item.tone} title={item.title} detail={item.detail} last={index === visibleSamples.length - 1} trailing={<StatusPill tone={item.tone} label={item.label} />} />)}</Surface></View>
-    <N0Text variant="caption" style={{ textAlign: 'center' }}>Gerçek geçmiş yalnızca açık saklama tercihiyle oluşturulacak.</N0Text>
+  const insets = useSafeAreaInsets();
+  const [filter, setFilter] = useState<(typeof filters)[number]>('Tümü');
+  return <Screen contentContainerStyle={{ minHeight: '100%', paddingTop: insets.top + 12, gap: 18 }}>
+    <N0Text variant="title" style={{ fontSize: 27 }}>Geçmiş</N0Text>
+    <View style={{ flexDirection: 'row', gap: 7 }}>{filters.map((label) => <Pressable key={label} onPress={() => setFilter(label)} accessibilityRole="button" accessibilityState={{ selected: filter === label }} style={({ pressed }) => ({ flex: 1, minHeight: 41, borderRadius: radius.md, borderCurve: 'continuous', borderWidth: filter === label ? 1.5 : 1, borderColor: filter === label ? colors.brand : colors.separator, backgroundColor: filter === label ? colors.brandWash : colors.surface, alignItems: 'center', justifyContent: 'center', opacity: pressed ? 0.62 : 1 })}><N0Text variant="small" style={{ color: filter === label ? colors.text : colors.textSecondary, fontFamily: filter === label ? 'Sora_600SemiBold' : 'Sora_400Regular', fontSize: 10.5 }}>{label}</N0Text></Pressable>)}</View>
+    <View style={{ flex: 1, minHeight: 430, alignItems: 'center', justifyContent: 'center', paddingBottom: 80 }}><Surface style={{ width: '100%', alignItems: 'center', gap: 12, paddingVertical: 30 }}><View style={{ width: 64, height: 64, borderRadius: radius.full, backgroundColor: colors.brandWash, borderWidth: 1, borderColor: colors.border, alignItems: 'center', justifyContent: 'center' }}><N0Symbol name={filter === 'Tümü' ? 'clock' : filter === 'Link' ? 'link' : filter === 'QR' ? 'qrcode.viewfinder' : filter === 'Mesaj' ? 'message.fill' : 'envelope.fill'} size={29} /></View><N0Text variant="heading">Henüz {filter === 'Tümü' ? 'analiz kaydı' : filter.toLocaleLowerCase('tr-TR') + ' kaydı'} yok</N0Text><N0Text variant="small" style={{ maxWidth: 280, textAlign: 'center' }}>Saklamayı seçtiğiniz gerçek analizler tarih ve risk durumlarıyla burada listelenecek.</N0Text></Surface></View>
   </Screen>;
 }

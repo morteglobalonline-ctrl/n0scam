@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { Pressable, View } from 'react-native';
-import { GroupedRow } from '@/components/grouped-row';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { N0Symbol } from '@/components/n0-symbol';
 import { N0Text } from '@/components/n0-text';
 import { Screen } from '@/components/screen';
@@ -8,16 +8,18 @@ import { Surface } from '@/components/surface';
 import { colors, radius, spacing } from '@/theme';
 
 const scanModes = [
-  { title: 'QR Kod Tara', detail: 'Kameradan veya fotoğraftan, hedefi açmadan.', icon: 'qrcode.viewfinder' as const, route: '/qr-scanner' as const },
-  { title: 'Link Analiz Et', detail: 'URL yapısını ve aldatıcı işaretleri incele.', icon: 'link' as const, route: '/link-analysis' as const },
-  { title: 'Mesaj / E-posta Kontrol Et', detail: 'Metindeki baskı ve bilgi taleplerini bul.', icon: 'text.bubble.fill' as const, route: '/message-analysis' as const },
+  { title: 'QR Kod Tara', detail: 'Kameradan veya fotoğraftan', icon: 'qrcode.viewfinder' as const, route: '/qr-scanner' as const },
+  { title: 'Link Analiz Et', detail: 'URL yapısını kontrol et', icon: 'link' as const, route: '/link-analysis' as const },
+  { title: 'Mesaj / E-posta', detail: 'Şüpheli metni incele', icon: 'doc.text.fill' as const, route: '/message-analysis' as const },
+  { title: 'Fotoğraf Analiz Et', detail: 'Görseldeki QR kodunu seç', icon: 'photo.fill' as const, route: '/qr-scanner' as const },
 ];
 
 export default function ScanScreen() {
-  return <Screen>
-    <View style={{ alignItems: 'center', gap: 5, paddingTop: spacing.sm }}><View style={{ width: 48, height: 48, borderRadius: radius.full, borderWidth: 1, borderColor: colors.brand, backgroundColor: colors.brandWash, alignItems: 'center', justifyContent: 'center' }}><N0Symbol name="viewfinder" size={25} /></View><N0Text variant="title">Tarama</N0Text><N0Text variant="small" style={{ textAlign: 'center' }}>Kontrol türünü seç. İçerik iznin olmadan açılmaz.</N0Text></View>
-    <Surface style={{ padding: 0 }}>{scanModes.map((mode, index) => <GroupedRow key={mode.title} icon={mode.icon} title={mode.title} detail={mode.detail} last={index === scanModes.length - 1} onPress={() => router.push(mode.route)} />)}</Surface>
-    <Pressable onPress={() => router.push('/qr-scanner')} style={({ pressed }) => ({ minHeight: 154, borderRadius: radius.lg, borderWidth: 1, borderStyle: 'dashed', borderColor: colors.brand, backgroundColor: colors.brandWash, alignItems: 'center', justifyContent: 'center', gap: 8, opacity: pressed ? 0.7 : 1 })}><N0Symbol name="camera.fill" size={29} /><N0Text variant="headline">Kamerayı Aç</N0Text><N0Text variant="caption">QR kodu kadraja getir</N0Text></Pressable>
+  const insets = useSafeAreaInsets();
+  return <Screen contentContainerStyle={{ paddingTop: insets.top + 12, gap: spacing.lg }}>
+    <View style={{ gap: 4 }}><N0Text variant="title" style={{ fontSize: 27 }}>Tarama</N0Text><N0Text variant="small">Kontrol türünü seçin. İçerik izniniz olmadan açılmaz.</N0Text></View>
+    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 9 }}>{scanModes.map((mode) => <Pressable key={mode.title} onPress={() => router.push(mode.route)} style={({ pressed }) => ({ width: '48.6%', minHeight: 132, backgroundColor: colors.surface, borderWidth: 1, borderColor: pressed ? colors.brand : colors.border, borderRadius: radius.lg, borderCurve: 'continuous', alignItems: 'center', justifyContent: 'center', padding: 13, gap: 9, opacity: pressed ? 0.65 : 1 })}><N0Symbol name={mode.icon} size={34} /><N0Text variant="headline" style={{ textAlign: 'center', fontSize: 13 }}>{mode.title}</N0Text><N0Text variant="caption" style={{ textAlign: 'center' }}>{mode.detail}</N0Text></Pressable>)}</View>
+    <Pressable onPress={() => router.push('/qr-scanner')} style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}><Surface style={{ minHeight: 170, alignItems: 'center', justifyContent: 'center', gap: 10, backgroundColor: colors.brandWash }}><View style={{ width: 64, height: 64, borderRadius: radius.full, borderWidth: 1, borderColor: colors.brand, alignItems: 'center', justifyContent: 'center' }}><N0Symbol name="camera.fill" size={30} /></View><N0Text variant="heading">Kamerayla Hızlı Tara</N0Text><N0Text variant="small">QR kodunu açmadan analiz edin.</N0Text></Surface></Pressable>
     <N0Text variant="caption" style={{ textAlign: 'center' }}>Sonuçlar analitiktir, tavsiye değildir.</N0Text>
   </Screen>;
 }
