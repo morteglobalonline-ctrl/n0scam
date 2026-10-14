@@ -1,0 +1,65 @@
+{
+  "expo": {
+    "name": "n0scam",
+    "slug": "n0scam",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/n0scam-icon.png",
+    "scheme": "n0scam",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#000000",
+    "ios": {
+      "bundleIdentifier": "com.morteglobalonline.n0scam",
+      "supportsTablet": false,
+      "icon": "./assets/images/n0scam-icon.png",
+      "infoPlist": {
+        "CADisableMinimumFrameDurationOnPhone": true,
+        "NSCameraUsageDescription": "n0scam, QR kodunu cihazında çözümlemek ve hedefi açmadan önce göstermek için kamerayı kullanır.",
+        "NSPhotoLibraryUsageDescription": "n0scam, seçtiğin görseldeki QR kodunu incelemek için fotoğraf erişimi ister."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#000000",
+        "foregroundImage": "./assets/images/n0scam-icon.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/n0scam-icon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#000000",
+          "image": "./assets/images/n0scam-logo.png",
+          "imageWidth": 260,
+          "dark": {
+            "backgroundColor": "#000000",
+            "image": "./assets/images/n0scam-logo.png"
+          }
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "n0scam, QR kodunu cihazında çözümlemek için kamerayı kullanır.",
+          "barcodeScannerEnabled": true
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "n0scam, seçtiğin görseldeki QR kodunu incelemek için fotoğraf erişimi ister."
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}

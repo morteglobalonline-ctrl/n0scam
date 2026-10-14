@@ -1,0 +1,16 @@
+{
+  "name": "n0scam",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "start": "npm --prefix apps/mobile run start",
+    "ios": "npm --prefix apps/mobile run ios",
+    "lint": "npm --prefix apps/mobile run lint",
+    "typecheck": "npm --prefix apps/mobile run typecheck",
+    "check": "npm run lint && npm run typecheck"
+  }
+}
