@@ -8,7 +8,7 @@ Date: 2026-10-14
 - n0scam brand system: n0 Green, black/white palette, Sora typography, real source logo, and project app icon.
 - Home, Scan, Protection, History, Settings, Privacy, Module Detail, Link Analysis, Message Analysis, QR Scanner, and Risk Result screens.
 - Working on-device preliminary URL and message heuristics with explicit uncertainty and missing-data disclosure.
-- Camera permission and QR scan flow that never auto-opens decoded content.
+- Camera and photo-library QR flows that never auto-open decoded content.
 - Shared contracts for risk, protection, integrations, and incidents.
 - Feasibility, architecture, data-flow, privacy, threat-model, and acceptance-test documents.
 
