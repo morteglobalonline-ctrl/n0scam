@@ -1,17 +1,28 @@
 import { router } from 'expo-router';
-import { Pressable, View } from 'react-native';
-import { N0Symbol } from '@/components/n0-symbol';
+import { View } from 'react-native';
+import { GroupedRow } from '@/components/grouped-row';
 import { N0Text } from '@/components/n0-text';
 import { Screen } from '@/components/screen';
+import { StatusPill } from '@/components/status-pill';
 import { Surface } from '@/components/surface';
-import { colors, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 
 const rows = [
-  { title: 'Gizlilik ve veri', detail: 'Veri minimizasyonu ve saklama', icon: 'hand.raised.fill' as const, route: '/privacy' as const },
-  { title: 'Bağlı hesaplar', detail: 'Henüz bağlantı yok', icon: 'person.crop.circle.badge.plus' as const, route: '/protection' as const },
-  { title: 'İzinler', detail: 'Kamera izni kullanım sırasında istenir', icon: 'checkmark.shield.fill' as const, route: '/protection' as const },
+  { id: 'account', title: 'Hesap', detail: 'Profil ve hesap işlemleri', icon: 'person.crop.circle.fill' as const },
+  { id: 'connections', title: 'Bağlı Hesaplar', detail: 'E-posta ve tarayıcı bağlantıları', icon: 'link' as const },
+  { id: 'privacy', title: 'Gizlilik ve Veri', detail: 'İzinler, saklama ve veri kullanımı', icon: 'hand.raised.fill' as const },
+  { id: 'notifications', title: 'Bildirimler', detail: 'Uyarı tercihleri', icon: 'bell.fill' as const },
+  { id: 'language', title: 'Dil', detail: 'Türkçe', icon: 'globe' as const },
+  { id: 'appearance', title: 'Görünüm', detail: 'Koyu tema', icon: 'moon.fill' as const },
+  { id: 'support', title: 'Destek', detail: 'Yardım ve geri bildirim', icon: 'questionmark.circle.fill' as const },
+  { id: 'about', title: 'Hakkında', detail: 'n0scam iOS geliştirme sürümü', icon: 'info.circle.fill' as const },
 ];
 
 export default function SettingsScreen() {
-  return <Screen><View style={{ paddingTop: spacing.xl, gap: spacing.sm }}><N0Text variant="title">Ayarlar</N0Text><N0Text variant="small">n0scam • iOS erken geliştirme sürümü</N0Text></View><Surface style={{ padding: 0 }}>{rows.map((row, index) => <Pressable key={row.title} onPress={() => router.push(row.route)} style={({ pressed }) => ({ padding: spacing.lg, flexDirection: 'row', alignItems: 'center', gap: spacing.md, borderBottomWidth: index < rows.length - 1 ? 1 : 0, borderBottomColor: colors.separator, opacity: pressed ? 0.65 : 1 })}><N0Symbol name={row.icon} /><View style={{ flex: 1 }}><N0Text variant="headline">{row.title}</N0Text><N0Text variant="caption">{row.detail}</N0Text></View><N0Symbol name="chevron.right" size={15} tintColor={colors.textMuted} /></Pressable>)}</Surface><View style={{ gap: spacing.sm }}><N0Text variant="caption">Hesap ve abonelik</N0Text><Surface><N0Text variant="headline">Ücretsiz geliştirme sürümü</N0Text><N0Text variant="small">Apple IAP ve canlı Pro özellikleri bu kilometre taşında bağlı değil.</N0Text></Surface></View></Screen>;
+  return <Screen>
+    <View style={{ gap: 3, paddingTop: spacing.sm }}><N0Text variant="title">Ayarlar</N0Text><N0Text variant="small">Hesap, gizlilik ve uygulama tercihleri</N0Text></View>
+    <Surface style={{ padding: 0 }}><GroupedRow icon="person.crop.circle.fill" title="n0scam Kullanıcısı" detail="Yerel geliştirme profili" onPress={() => router.push({ pathname: '/setting/[id]', params: { id: 'account' } })} trailing={<View style={{ width: 29, height: 29, borderRadius: radius.full, backgroundColor: colors.brandMuted, alignItems: 'center', justifyContent: 'center' }}><N0Text variant="headline" style={{ color: colors.brand }}>N</N0Text></View>} />{rows.map((row, index) => <GroupedRow key={row.title} icon={row.icon} title={row.title} detail={row.detail} last={index === rows.length - 1} onPress={() => row.id === 'connections' ? router.push('/protection') : row.id === 'privacy' ? router.push('/privacy') : router.push({ pathname: '/setting/[id]', params: { id: row.id } })} />)}</Surface>
+    <Surface style={{ padding: 0 }}><GroupedRow icon="crown.fill" title="n0scam Pro" detail="Gelişmiş koruma özellikleri" last onPress={() => router.push('/pro')} trailing={<StatusPill tone="brand" label="Yakında" />} /></Surface>
+    <N0Text variant="caption" style={{ textAlign: 'center' }}>Sürüm 1.0.0 • iOS geliştirme yapısı</N0Text>
+  </Screen>;
 }

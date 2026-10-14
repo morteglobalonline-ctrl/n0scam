@@ -7,9 +7,10 @@ export type ProtectionModule = {
 };
 
 export const protectionModules: ProtectionModule[] = [
-  { id: 'safari', name: 'Safari Koruması', summary: 'Safari Web Extension fizibilite aşamasında.', state: 'NOT_CONFIGURED', coverage: 'Safari için henüz canlı koruma yok.' },
   { id: 'gmail', name: 'Gmail Koruması', summary: 'OAuth ve backend health-check gerektirir.', state: 'NOT_CONFIGURED', coverage: 'Bağlı posta kutusu bulunmuyor.' },
   { id: 'outlook', name: 'Outlook Koruması', summary: 'Microsoft Graph bağlantısı gerektirir.', state: 'NOT_CONFIGURED', coverage: 'Bağlı posta kutusu bulunmuyor.' },
+  { id: 'safari', name: 'Safari Koruması', summary: 'Safari Web Extension fizibilite aşamasında.', state: 'NOT_CONFIGURED', coverage: 'Safari için henüz canlı koruma yok.' },
+  { id: 'chrome', name: 'Chrome Koruması', summary: 'iOS tarayıcı kapsamı doğrulanmalı.', state: 'NOT_CONFIGURED', coverage: 'Chrome için henüz canlı koruma yok.' },
   { id: 'sms', name: 'Mesaj Koruması', summary: 'iOS Message Filter Extension doğrulanmalı.', state: 'NOT_CONFIGURED', coverage: 'Mesajlar arka planda okunmuyor.' },
   { id: 'network', name: 'Ağ Koruması', summary: 'Apple entitlement ve cihaz PoC sonucu gerekli.', state: 'NOT_SUPPORTED', coverage: 'Bu sürümde ağ trafiği korunmuyor.' },
 ];
