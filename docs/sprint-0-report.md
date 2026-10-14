@@ -11,6 +11,9 @@ Date: 2026-10-14
 - Camera and photo-library QR flows that never auto-open decoded content.
 - Shared contracts for risk, protection, integrations, and incidents.
 - Feasibility, architecture, data-flow, privacy, threat-model, and acceptance-test documents.
+- EAS development, simulator, preview, and production build profiles for both platforms.
+- Stable iOS and Android application identifiers and monotonically increasing native build versions.
+- Least-privilege camera/photo configuration; Android audio recording permission is explicitly blocked.
 
 ## Verification
 
@@ -19,6 +22,7 @@ Date: 2026-10-14
 - `npm test`: 5/5 pass.
 - `npx expo-doctor@latest`: 21/21 pass.
 - `npx expo export --platform ios`: pass.
+- `npx expo export --platform android`: pass.
 - Expo Go on iPhone 17 Pro simulator: home, link input, validation, risk result, new-analysis navigation, and QR permission fallback exercised.
 
 ## Known limitations and blockers

@@ -10,6 +10,7 @@
     "backgroundColor": "#000000",
     "ios": {
       "bundleIdentifier": "com.morteglobalonline.n0scam",
+      "buildNumber": "1",
       "supportsTablet": false,
       "icon": "./assets/images/n0scam-icon.png",
       "infoPlist": {
@@ -19,6 +20,11 @@
       }
     },
     "android": {
+      "package": "com.morteglobalonline.n0scam",
+      "versionCode": 1,
+      "blockedPermissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
       "adaptiveIcon": {
         "backgroundColor": "#000000",
         "foregroundImage": "./assets/images/n0scam-icon.png"
@@ -47,13 +53,15 @@
         "expo-camera",
         {
           "cameraPermission": "n0scam, QR kodunu cihazında çözümlemek için kamerayı kullanır.",
+          "recordAudioAndroid": false,
           "barcodeScannerEnabled": true
         }
       ],
       [
         "expo-image-picker",
         {
-          "photosPermission": "n0scam, seçtiğin görseldeki QR kodunu incelemek için fotoğraf erişimi ister."
+          "photosPermission": "n0scam, seçtiğin görseldeki QR kodunu incelemek için fotoğraf erişimi ister.",
+          "microphonePermission": false
         }
       ]
     ],

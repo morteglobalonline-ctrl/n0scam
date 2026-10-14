@@ -12,5 +12,17 @@
     "lint": "npm --prefix apps/mobile run lint",
     "typecheck": "npm --prefix apps/mobile run typecheck",
     "check": "npm run lint && npm run typecheck"
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.2"
+  },
+  "overrides": {
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-gesture-handler": "2.32.0",
+    "react-native-reanimated": "4.5.1",
+    "react-native-screens": "4.26.2",
+    "react-native-worklets": "0.10.1"
   }
 }
