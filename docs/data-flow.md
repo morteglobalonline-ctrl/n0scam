@@ -8,6 +8,13 @@
 4. A future Risk API may add verified intelligence and isolated redirect analysis.
 5. The user sees evidence, missing data, and safe next actions before any external navigation.
 
+## Live Risk API boundary
+
+- `EXPO_PUBLIC_RISK_API_URL` contains only the public HTTPS service location; secrets never ship in the client bundle.
+- Requests are versioned, size-limited, cancellable, and fail closed to an explicitly labelled local preliminary result.
+- Server responses are treated as untrusted input and must match the typed `RiskAssessment` contract before rendering.
+- Raw content is never written to logs. Message or email content must not use this transport until the product has a purpose-specific disclosure and user consent flow.
+
 ## QR
 
 1. Camera permission is requested only when the QR screen is opened.

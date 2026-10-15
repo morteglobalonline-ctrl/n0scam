@@ -10,18 +10,17 @@
     "backgroundColor": "#000000",
     "ios": {
       "bundleIdentifier": "com.morteglobalonline.n0scam",
-      "buildNumber": "1",
       "supportsTablet": false,
       "icon": "./assets/images/n0scam-icon.png",
       "infoPlist": {
         "CADisableMinimumFrameDurationOnPhone": true,
+        "ITSAppUsesNonExemptEncryption": false,
         "NSCameraUsageDescription": "n0scam, QR kodunu cihazında çözümlemek ve hedefi açmadan önce göstermek için kamerayı kullanır.",
         "NSPhotoLibraryUsageDescription": "n0scam, seçtiğin görseldeki QR kodunu incelemek için fotoğraf erişimi ister."
       }
     },
     "android": {
       "package": "com.morteglobalonline.n0scam",
-      "versionCode": 1,
       "blockedPermissions": [
         "android.permission.RECORD_AUDIO"
       ],
@@ -29,7 +28,10 @@
         "backgroundColor": "#000000",
         "foregroundImage": "./assets/images/n0scam-icon.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.CAMERA"
+      ]
     },
     "web": {
       "output": "static",
@@ -53,6 +55,7 @@
         "expo-camera",
         {
           "cameraPermission": "n0scam, QR kodunu cihazında çözümlemek için kamerayı kullanır.",
+          "microphonePermission": false,
           "recordAudioAndroid": false,
           "barcodeScannerEnabled": true
         }
@@ -68,6 +71,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "d1bc6795-2b01-4b79-b766-cf9257efb4b9"
+      }
+    },
+    "owner": "haqd"
   }
 }

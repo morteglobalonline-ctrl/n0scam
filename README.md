@@ -9,6 +9,8 @@ iOS-first scam prevention app based on the Plan B product specification.
 - Honest protection-state model: no module is marked active without live verification
 - URL, QR, message, protection-center, history, and settings foundations
 - iOS/Android application identifiers, least-privilege permissions, and EAS development/preview/production profiles
+- Versioned live Risk API transport boundary with timeout, cancellation, response validation, and no-secret configuration
+- Bounded deep-link intake plus a minimum-permission Safari Web Extension pre-check proof of concept
 - Shared typed contracts and product/security documentation
 
 ## Run

@@ -14,6 +14,9 @@ Date: 2026-10-14
 - EAS development, simulator, preview, and production build profiles for both platforms.
 - Stable iOS and Android application identifiers and monotonically increasing native build versions.
 - Least-privilege camera/photo configuration; Android audio recording permission is explicitly blocked.
+- EAS project linkage and successful iOS development-simulator build.
+- Typed live Risk API client boundary with fail-closed validation and automated tests.
+- Safe extension handoff routes and a minimum-permission Safari Web Extension pre-check proof of concept.
 
 ## Verification
 

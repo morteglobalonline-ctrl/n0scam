@@ -3,6 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "dependencies": {
+    "@n0scam/contracts": "0.1.0",
     "@expo-google-fonts/sora": "^0.4.2",
     "@expo/ui": "~57.0.24",
     "expo": "~57.0.28",
@@ -44,7 +45,7 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --test src/domain/risk.test.mjs"
+    "test": "node --experimental-strip-types --test src/domain/intake.test.mjs src/domain/risk.test.mjs src/services/risk-api.test.mjs"
   },
   "private": true
 }

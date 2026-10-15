@@ -15,6 +15,8 @@ The EAS project must be created under the Morte-controlled Expo account. Do not 
 3. Run `npx eas-cli@latest build --platform android --profile development` for an Android test device.
 4. Keep `preview` for internal testers and `production` for store-signed builds only.
 
+`preview-simulator` embeds the JavaScript bundle for isolated simulator acceptance testing without exposing a Metro development server on the local network.
+
 ## Physical-device acceptance gate
 
 - Camera permission grant, denial, and Settings recovery.
