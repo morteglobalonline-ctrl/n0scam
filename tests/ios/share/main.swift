@@ -3,6 +3,8 @@ import Foundation
 private let cases: [(String, String, SharedRiskLevel)] = [
     ("lookalike URL", "http://paypal-login-account-check.top", .elevated),
     ("ordinary URL", "https://example.com", .unknown),
+    ("official regional brand URL", "https://amazon.com.tr", .unknown),
+    ("brand outside official boundary", "https://apple.com.evil.example/login", .caution),
     ("pressure message", "ACİL: Şifrenizle hemen giriş yapın ve kart ödemenizi tamamlayın.", .elevated),
     ("ordinary message", "Akşam saat yedide görüşelim mi?", .unknown),
 ]

@@ -59,10 +59,12 @@ enum SharedRiskClassifier {
         if host.filter({ $0 == "-" }).count >= 3 { add(1) }
         if shortenerHosts.contains(host) { add(2) }
 
-        let brands = ["apple": "apple.com", "paypal": "paypal.com", "amazon": "amazon.com", "netflix": "netflix.com", "instagram": "instagram.com"]
-        for (brand, officialHost) in brands where host.contains(brand) {
-            if host != officialHost && !host.hasSuffix(".\(officialHost)") { add(2) }
+        let brands = ["apple": ["apple.com"], "paypal": ["paypal.com"], "amazon": ["amazon.com", "amazon.com.tr"], "netflix": ["netflix.com"], "instagram": ["instagram.com"]]
+        for (brand, officialHosts) in brands where host.contains(brand) {
+            let isOfficial = officialHosts.contains { host == $0 || host.hasSuffix(".\($0)") }
+            if !isOfficial { add(2) }
         }
+        if host.contains("banka") || host.contains("bank") { add(1) }
 
         return SharedRiskAssessment(
             level: score >= 4 ? .elevated : score >= 2 ? .caution : .unknown,

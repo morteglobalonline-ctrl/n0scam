@@ -19,3 +19,21 @@ test('rejects non-web schemes without executing them', () => {
   assert.equal(result.supported, false);
   assert.equal(result.verdict, 'UNKNOWN');
 });
+
+test('allows official brand domain boundaries without an impersonation signal', () => {
+  const result = classifyActiveUrl('https://support.apple.com/tr-tr');
+  assert.equal(result.verdict, 'UNKNOWN');
+  assert.equal(result.signals.some((signal) => signal.includes('marka taklidi')), false);
+});
+
+test('flags brand text outside the official domain boundary', () => {
+  const result = classifyActiveUrl('https://apple.com.evil.example/login');
+  assert.equal(result.verdict, 'WARN');
+  assert.ok(result.signals.some((signal) => signal.includes('marka taklidi')));
+});
+
+test('warns when a shortener hides the destination', () => {
+  const result = classifyActiveUrl('https://bit.ly/example');
+  assert.equal(result.verdict, 'WARN');
+  assert.ok(result.signals.some((signal) => signal.includes('gerçek hedefi')));
+});

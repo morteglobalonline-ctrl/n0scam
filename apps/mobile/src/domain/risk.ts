@@ -10,7 +10,18 @@ export type LocalAssessment = {
 };
 
 const suspiciousTlds = new Set(['zip', 'top', 'click', 'support', 'live', 'cam', 'xyz']);
-const brandWords = ['banka', 'bank', 'paypal', 'apple', 'netflix', 'amazon', 'instagram'];
+const shortenerHosts = new Set(['bit.ly', 'tinyurl.com', 't.co', 'cutt.ly', 'rb.gy']);
+const officialBrandHosts: Record<string, readonly string[]> = {
+  apple: ['apple.com'],
+  paypal: ['paypal.com'],
+  amazon: ['amazon.com', 'amazon.com.tr'],
+  netflix: ['netflix.com'],
+  instagram: ['instagram.com'],
+};
+
+function isHostOrSubdomain(host: string, domain: string) {
+  return host === domain || host.endsWith(`.${domain}`);
+}
 
 export function normalizeUrl(raw: string) {
   const trimmed = raw.trim();
@@ -33,7 +44,10 @@ export function analyzeUrl(raw: string, inputType: 'URL' | 'QR' = 'URL'): LocalA
   const tld = host.split('.').at(-1) ?? '';
   if (suspiciousTlds.has(tld)) { score += 1; evidence.push({ title: 'Ek doğrulama gereken uzantı', detail: `.${tld} uzantısı tek başına kötü niyet kanıtı değildir, ancak dikkat gerektirir.` }); }
   if ((host.match(/-/g) ?? []).length >= 3) { score += 1; evidence.push({ title: 'Karmaşık alan adı', detail: 'Alan adında alışılmadık sayıda tire bulunuyor.' }); }
-  if (brandWords.some((brand) => host.includes(brand)) && !host.endsWith('apple.com') && !host.endsWith('amazon.com')) { score += 2; evidence.push({ title: 'Marka taklidi ihtimali', detail: 'Alan adı bir marka ifadesi kullanıyor; resmi alan adı bağımsız doğrulanmalı.' }); }
+  if (shortenerHosts.has(host)) { score += 2; evidence.push({ title: 'Gizlenmiş hedef adres', detail: 'Kısaltılmış bağlantı gerçek hedef alan adını ilk bakışta göstermiyor.' }); }
+  const imitatesBrand = Object.entries(officialBrandHosts).some(([brand, domains]) => host.includes(brand) && !domains.some((domain) => isHostOrSubdomain(host, domain)));
+  if (imitatesBrand) { score += 2; evidence.push({ title: 'Marka taklidi ihtimali', detail: 'Alan adı bir marka ifadesi kullanıyor; resmi alan adı bağımsız doğrulanmalı.' }); }
+  else if (host.includes('banka') || host.includes('bank')) { score += 1; evidence.push({ title: 'Marka taklidi ihtimali', detail: 'Alan adı finans kurumu çağrışımı yapıyor; resmi alan adı bağımsız doğrulanmalı.' }); }
   return {
     inputType,
     displayValue: url.toString(),

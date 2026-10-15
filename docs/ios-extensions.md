@@ -1,7 +1,7 @@
 # iOS protection extensions
 
 The Expo app contains three generated native targets under `apps/mobile/targets`.
-Both targets are intentionally conservative and remain unavailable in the UI
+All three targets are intentionally conservative and remain unavailable in the UI
 until signed physical-device acceptance has been completed.
 
 ## Safari Web Extension
@@ -47,7 +47,7 @@ or starts remote analysis without an explicit user action.
 
 ## Local verification
 
-Regenerate the iOS project and compile both extension targets:
+Regenerate the iOS project and compile all extension targets:
 
 ```sh
 cd apps/mobile

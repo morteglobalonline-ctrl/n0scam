@@ -1,5 +1,16 @@
 const suspiciousTlds = new Set(['zip', 'top', 'click', 'support', 'live', 'cam', 'xyz']);
-const brandWords = ['banka', 'bank', 'paypal', 'apple', 'netflix', 'amazon', 'instagram'];
+const shortenerHosts = new Set(['bit.ly', 'tinyurl.com', 't.co', 'cutt.ly', 'rb.gy']);
+const officialBrandHosts = {
+  apple: ['apple.com'],
+  paypal: ['paypal.com'],
+  amazon: ['amazon.com', 'amazon.com.tr'],
+  netflix: ['netflix.com'],
+  instagram: ['instagram.com'],
+};
+
+function isHostOrSubdomain(host, domain) {
+  return host === domain || host.endsWith(`.${domain}`);
+}
 
 export function classifyActiveUrl(raw) {
   let url;
@@ -23,9 +34,14 @@ export function classifyActiveUrl(raw) {
   const tld = host.split('.').at(-1) ?? '';
   if (suspiciousTlds.has(tld)) { score += 1; signals.push(`.${tld} uzantısı ek doğrulama gerektiriyor.`); }
   if ((host.match(/-/g) ?? []).length >= 3) { score += 1; signals.push('Alan adında alışılmadık sayıda tire var.'); }
-  if (brandWords.some((brand) => host.includes(brand)) && !host.endsWith('apple.com') && !host.endsWith('amazon.com')) {
+  if (shortenerHosts.has(host)) { score += 2; signals.push('Kısaltılmış bağlantı gerçek hedefi gizliyor.'); }
+  const imitatesBrand = Object.entries(officialBrandHosts).some(([brand, domains]) => host.includes(brand) && !domains.some((domain) => isHostOrSubdomain(host, domain)));
+  if (imitatesBrand) {
     score += 2;
     signals.push('Alan adı marka taklidi ihtimali taşıyor.');
+  } else if (host.includes('banka') || host.includes('bank')) {
+    score += 1;
+    signals.push('Alan adı finans kurumu taklidi ihtimali taşıyor.');
   }
 
   if (!signals.length) signals.push('Belirgin yerel sinyal bulunmadı; bu güvenli olduğu anlamına gelmez.');
