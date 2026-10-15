@@ -2,7 +2,7 @@
 
 ## Current installable scope
 
-The Expo client can be packaged as an iOS or Android development or preview build. QR camera scanning, photo import, manual URL analysis, and manual message analysis are suitable for device testing. The Safari Web Extension and IdentityLookup Message Filter Extension now compile as native targets, but remain physical-device acceptance candidates rather than active protection modules.
+The Expo client can be packaged as an iOS or Android development or preview build. QR camera scanning, photo import, manual URL analysis, and manual message analysis are suitable for device testing. The Safari Web Extension, IdentityLookup Message Filter Extension, and local Share Extension now compile as native targets, but remain physical-device acceptance candidates rather than active protection modules.
 
 No screen may describe Safari, SMS, email, or network protection as active until its native extension or backend connector has passed a fresh health check on the device.
 
@@ -33,7 +33,7 @@ The repository is linked to the existing Expo project `@haqd/n0scam` with projec
 1. Safari Web Extension signed physical-device validation and enablement onboarding. The CNG/EAS target exists with only `activeTab` permission.
 2. IdentityLookup Message Filter Extension signed physical-device validation and enablement onboarding. The local-only, conservative target exists for unknown-sender SMS/MMS; it does not cover iMessage or contacts.
 3. URL Filter / Network Extension proof of concept with the required Apple capability and privacy-preserving rule service.
-4. Share extension for links and message text handed off from other apps.
+4. Share Extension signed physical-device validation for user-invoked, local analysis of URLs and plain text. The target exists and deliberately does not advertise file, image, or movie access.
 5. Gmail and Outlook OAuth PKCE connectors backed by a server-side token vault, webhook reconciliation, revoke, and deletion flows.
 6. Versioned live Risk API with threat feeds, redirect isolation, rate limiting, evidence provenance, and offline fallback.
 7. APNs/FCM notifications, secure local history, account export/deletion, privacy labels, and store review evidence.

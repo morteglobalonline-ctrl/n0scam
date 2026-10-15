@@ -1,6 +1,6 @@
 # iOS protection extensions
 
-The Expo app contains two generated native targets under `apps/mobile/targets`.
+The Expo app contains three generated native targets under `apps/mobile/targets`.
 Both targets are intentionally conservative and remain unavailable in the UI
 until signed physical-device acceptance has been completed.
 
@@ -25,6 +25,18 @@ until signed physical-device acceptance has been completed.
   independent pressure categories cross the high-confidence threshold.
 - Returns `.none` for ordinary, ambiguous, or copy-only messages.
 
+## Share Extension
+
+- Target: `n0scamShare`
+- Bundle identifier: `com.morteglobalonline.n0scam.share`
+- Extension point: `com.apple.share-services`
+- Accepts one shared web URL or plain text; it does not advertise image, movie,
+  file, or broad attachment support.
+- Shows a bounded preview and waits for the user to tap `Analiz Et`.
+- Performs a deterministic local pre-check inside the extension without
+  logging, persisting, uploading, or automatically opening the content.
+- Unknown or low-signal content is never described as safe.
+
 The containing app accepts bounded, non-executing handoff routes:
 
 - `n0scam://link-analysis?source=safari-extension&value=<percent-encoded-url>`
@@ -42,6 +54,7 @@ cd apps/mobile
 npx expo prebuild --platform ios --clean --no-install
 xcodebuild -project ios/n0scam.xcodeproj -target n0scamSafari -configuration Debug -sdk iphonesimulator CODE_SIGNING_ALLOWED=NO build
 xcodebuild -project ios/n0scam.xcodeproj -target n0scamMessageFilter -configuration Debug -sdk iphonesimulator CODE_SIGNING_ALLOWED=NO build
+xcodebuild -project ios/n0scam.xcodeproj -target n0scamShare -configuration Debug -sdk iphonesimulator CODE_SIGNING_ALLOWED=NO build
 ```
 
 Run the deterministic message-filter test fixture on macOS:
@@ -49,6 +62,8 @@ Run the deterministic message-filter test fixture on macOS:
 ```sh
 swiftc apps/mobile/targets/message-filter/MessageRiskClassifier.swift tests/ios/message-filter/main.swift -o /tmp/n0scam-message-filter-tests
 /tmp/n0scam-message-filter-tests
+swiftc apps/mobile/targets/share/SharedRiskClassifier.swift tests/ios/share/main.swift -o /tmp/n0scam-share-tests
+/tmp/n0scam-share-tests
 ```
 
 Compilation and simulator embedding do not replace signed physical-iPhone

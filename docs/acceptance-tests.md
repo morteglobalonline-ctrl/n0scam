@@ -10,7 +10,7 @@
 - A scanned QR payload does not automatically open an external app or browser.
 - Result views show evidence and missing data, and say “Analitiktir, tavsiye değildir.”
 - Brand colors and typography come from the shared theme.
-- Generated iOS builds embed and register both the Safari Web Extension and IdentityLookup Message Filter Extension with their expected bundle identifiers.
+- Generated iOS builds embed and register the Safari Web Extension, IdentityLookup Message Filter Extension, and Share Extension with their expected bundle identifiers.
 - iOS does not declare microphone usage; Android explicitly blocks microphone permission.
 - TypeScript and lint checks pass.
 
