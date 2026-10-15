@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { classifyActiveUrl } from './classifier.mjs';
+import { classifyActiveUrl } from '../../../apps/mobile/targets/safari/assets/classifier.js';
 
 test('does not claim an ordinary HTTPS URL is safe', () => {
   const result = classifyActiveUrl('https://example.com/path');

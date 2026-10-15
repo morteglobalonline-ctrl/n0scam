@@ -6,7 +6,7 @@
 apps/mobile                 Expo Router iOS-first client
 packages/contracts          Shared domain and API contracts
 docs                        Feasibility, privacy, threat model, data flow, tests
-native/ios-extensions       Future extension source and provisioning notes
+apps/mobile/targets         Expo CNG/EAS iOS extension targets
 services                    Future API/risk-engine boundaries
 ```
 

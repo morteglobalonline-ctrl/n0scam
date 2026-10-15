@@ -11,7 +11,7 @@
     "ios": "npm --prefix apps/mobile run ios",
     "lint": "npm --prefix apps/mobile run lint",
     "typecheck": "npm --prefix apps/mobile run typecheck",
-    "test": "npm --prefix apps/mobile test && node --test apps/mobile/targets/safari/classifier.test.mjs",
+    "test": "npm --prefix apps/mobile test && node --test tests/ios/safari/classifier.test.mjs",
     "check": "npm run lint && npm run typecheck"
   },
   "devDependencies": {
