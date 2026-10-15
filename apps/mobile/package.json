@@ -6,6 +6,7 @@
     "@bacons/apple-targets": "5.0.0",
     "@expo-google-fonts/sora": "^0.4.2",
     "@expo/ui": "~57.0.25",
+    "@expo/vector-icons": "^15.0.2",
     "@n0scam/contracts": "0.1.0",
     "expo": "~57.0.30",
     "expo-camera": "~57.0.6",
