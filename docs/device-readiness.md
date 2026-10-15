@@ -39,3 +39,13 @@ The repository is linked to the existing Expo project `@haqd/n0scam` with projec
 7. APNs/FCM notifications, secure local history, account export/deletion, privacy labels, and store review evidence.
 
 Expo Go is not an acceptance environment for the native-extension work. Those targets require a development build, signing/provisioning, and physical-device tests.
+
+## Recorded device evidence — 2026-10-15
+
+- EAS iOS simulator build `0d0b1563-192c-4271-b0a9-2a87f0d21a1b` finished from commit `0b41c7a`.
+- The built app contains `n0scamSafari.appex` with extension point `com.apple.Safari.web-extension` and `n0scamMessageFilter.appex` with extension point `com.apple.identitylookup.message-filter`.
+- Both extension bundles registered under the containing app on an iPhone 17 Pro simulator, and the containing app launched successfully.
+- The iOS app declares camera and photo-library usage descriptions and does not declare microphone usage.
+- Android preview build `9fa147a9-bb3e-4b57-bc44-4e3a9b64fe40` installed and launched on a Pixel 7 emulator without a sampled fatal exception or ANR. The device pass exposed missing Android icon fallbacks; commit `a9bb8bb` adds Material counterparts and its replacement EAS build is the acceptance candidate.
+
+Simulator registration proves packaging and target discovery, not real protection. Signed physical-iPhone enablement, unknown-sender message fixtures, Safari permission prompts, and false-positive review remain required.
