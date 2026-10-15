@@ -3,9 +3,10 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "dependencies": {
-    "@n0scam/contracts": "0.1.0",
+    "@bacons/apple-targets": "5.0.0",
     "@expo-google-fonts/sora": "^0.4.2",
     "@expo/ui": "~57.0.24",
+    "@n0scam/contracts": "0.1.0",
     "expo": "~57.0.28",
     "expo-camera": "~57.0.6",
     "expo-constants": "~57.0.21",
@@ -40,8 +41,8 @@
   },
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
