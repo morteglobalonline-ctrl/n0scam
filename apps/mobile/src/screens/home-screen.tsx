@@ -22,7 +22,7 @@ const vendorFor = (id: string) => id as 'gmail' | 'outlook' | 'safari' | 'chrome
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
-  const homeModules = protectionModules.filter((module) => module.id !== 'network');
+  const homeModules = protectionModules.filter((module) => ['gmail', 'outlook', 'safari', 'chrome', 'sms'].includes(module.id));
   return <Screen contentContainerStyle={{ paddingTop: insets.top + 8, gap: 12 }}>
     <View style={{ minHeight: 38, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
       <BrandWordmark />

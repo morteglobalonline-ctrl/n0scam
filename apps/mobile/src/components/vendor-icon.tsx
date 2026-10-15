@@ -10,6 +10,7 @@ const palettes = {
   safari: { background: '#FFFFFF', foreground: '#0A84FF', symbol: 'safari' as const },
   sms: { background: '#00E85F', foreground: '#FFFFFF', symbol: 'message.fill' as const },
   network: { background: '#3421D6', foreground: '#FFFFFF', symbol: 'network' as const },
+  family: { background: '#053C2D', foreground: '#00FF8A', symbol: 'person.2.fill' as const },
 };
 
 export function VendorIcon({ vendor, size = 42 }: { vendor: keyof typeof palettes; size?: number }) {
