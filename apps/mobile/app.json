@@ -4,7 +4,7 @@
     "slug": "n0scam",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/n0scam-icon.png",
+    "icon": "./assets/images/n0scam-icon-opaque.png",
     "scheme": "n0scam",
     "userInterfaceStyle": "dark",
     "backgroundColor": "#000000",
@@ -12,7 +12,7 @@
       "bundleIdentifier": "com.morteglobalonline.n0scam",
       "appleTeamId": "BRP6J9SXRV",
       "supportsTablet": false,
-      "icon": "./assets/images/n0scam-icon.png",
+      "icon": "./assets/images/n0scam-icon-opaque.png",
       "infoPlist": {
         "CADisableMinimumFrameDurationOnPhone": true,
         "ITSAppUsesNonExemptEncryption": false,
