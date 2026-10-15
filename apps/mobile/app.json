@@ -10,6 +10,7 @@
     "backgroundColor": "#000000",
     "ios": {
       "bundleIdentifier": "com.morteglobalonline.n0scam",
+      "appleTeamId": "BRP6J9SXRV",
       "supportsTablet": false,
       "icon": "./assets/images/n0scam-icon.png",
       "infoPlist": {
