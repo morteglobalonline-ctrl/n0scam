@@ -40,3 +40,12 @@ export const protectionModules: ProtectionModule[] = [
 ];
 
 export const stateLabel = { NOT_CONFIGURED: 'Kurulum gerekli', PERMISSION_REQUIRED: 'İzin gerekli', NOT_SUPPORTED: 'Henüz desteklenmiyor' } as const;
+
+const smsHeartbeatFreshnessMs = 30 * 24 * 60 * 60 * 1000;
+
+export function parseSmsHeartbeat(raw: string | null, now = Date.now()) {
+  if (!raw) return null;
+  const lastEvaluatedAt = Number(raw);
+  if (!Number.isSafeInteger(lastEvaluatedAt) || lastEvaluatedAt <= 0 || lastEvaluatedAt > now + 5 * 60 * 1000) return null;
+  return { lastEvaluatedAt, fresh: now - lastEvaluatedAt <= smsHeartbeatFreshnessMs };
+}

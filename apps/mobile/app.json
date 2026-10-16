@@ -12,7 +12,11 @@
       "bundleIdentifier": "com.morteglobalonline.n0scam",
       "appleTeamId": "BRP6J9SXRV",
       "supportsTablet": false,
-      "icon": "./assets/images/n0scam-icon-opaque.png",
+      "entitlements": {
+        "com.apple.security.application-groups": [
+          "group.com.morteglobalonline.n0scam.protection"
+        ]
+      },
       "infoPlist": {
         "CADisableMinimumFrameDurationOnPhone": true,
         "ITSAppUsesNonExemptEncryption": false,

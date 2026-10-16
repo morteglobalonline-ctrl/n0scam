@@ -2,7 +2,7 @@
 
 ## Current installable scope
 
-The Expo client can be packaged as an iOS or Android development or preview build. QR camera scanning, photo import, manual URL analysis, and manual message analysis are suitable for device testing. The Safari Web Extension, IdentityLookup Message Filter Extension, and local Share Extension now compile as native targets, but remain physical-device acceptance candidates rather than active protection modules.
+The Expo client can be packaged as an iOS or Android development or preview build. QR camera scanning, photo import, manual URL analysis, and manual message analysis are suitable for device testing. The Safari Web Extension, IdentityLookup Message Filter Extension, and local Share Extension now compile as native targets, but remain physical-device acceptance candidates rather than active protection modules. The Gmail mobile PKCE/status/revoke flow is also present, but stays disabled until its connector API is configured.
 
 No screen may describe Safari, SMS, email, or network protection as active until its native extension or backend connector has passed a fresh health check on the device.
 
@@ -31,10 +31,10 @@ The repository is linked to the existing Expo project `@haqd/n0scam` with projec
 ## Native protection roadmap
 
 1. Safari Web Extension signed physical-device validation and enablement onboarding. The CNG/EAS target exists with only `activeTab` permission.
-2. IdentityLookup Message Filter Extension signed physical-device validation and enablement onboarding. The local-only, conservative target exists for unknown-sender SMS/MMS; it does not cover iMessage or contacts.
+2. IdentityLookup Message Filter Extension signed physical-device validation and enablement onboarding. The local-only, conservative target exists for unknown-sender SMS/MMS; it does not cover iMessage or contacts. Its App Group heartbeat stores only the most recent extension execution timestamp, never the sender, message body, risk signals, or filter disposition. Because iOS does not expose the current Settings toggle to the containing app, a heartbeat proves recent execution but is not presented as current enablement.
 3. URL Filter / Network Extension proof of concept with the required Apple capability and privacy-preserving rule service.
 4. Share Extension signed physical-device validation for user-invoked, local analysis of URLs and plain text. The target exists and deliberately does not advertise file, image, or movie access.
-5. Gmail and Outlook OAuth PKCE connectors backed by a server-side token vault, webhook reconciliation, revoke, and deletion flows.
+5. Deploy and validate the Gmail contract in `docs/gmail-connector.md`; then implement Outlook with the same server-side token-vault, health, revoke, and deletion guarantees.
 6. Versioned live Risk API with threat feeds, redirect isolation, rate limiting, evidence provenance, and offline fallback.
 7. APNs/FCM notifications, secure local history, account export/deletion, privacy labels, and store review evidence.
 
@@ -51,5 +51,23 @@ Expo Go is not an acceptance environment for the native-extension work. Those ta
 - The three installed bundles registered in the iOS 26.2 simulator as `com.morteglobalonline.n0scam.safari`, `com.morteglobalonline.n0scam.message-filter`, and `com.morteglobalonline.n0scam.share`; the containing app still declares no microphone usage.
 - Safari displayed the n0scam action in its system share sheet. The Share Extension opened the shared `https://example.com/` value, waited for an explicit `Analiz Et` action, and rendered its local uncertainty result with the analytical-not-advice disclosure.
 - A local iOS 26.2 Release build linked `expo-sqlite` together with all three extensions and launched successfully. A high-risk URL result was explicitly saved, appeared in the Link/Tümü history as hostname-only metadata, and exposed a separate removal confirmation.
+
+## Recorded connector evidence — 2026-10-16
+
+- A clean iOS prebuild generated the App Group entitlement
+  `group.com.morteglobalonline.n0scam.protection` for both the containing app and
+  Message Filter target.
+- The Message Filter target compiled successfully after adding the content-free
+  `sms.lastEvaluationAt` heartbeat.
+- A full iPhone 17 Pro simulator Release build completed with zero errors and
+  linked `expo-crypto`, `expo-web-browser`, `ExtensionStorage`, `expo-sqlite`,
+  and all three extension targets.
+- The Gmail connection screen launched from the protection module in the
+  installed Release build. With no connector API configured, it rendered the
+  disabled connection state and did not fabricate an account or active status.
+- App Group entitlement/packaging is proven in the simulator. A genuine
+  IdentityLookup invocation and the resulting heartbeat still require a signed
+  physical iPhone because the simulator cannot stand in for the Messages
+  Settings and unknown-sender delivery path.
 
 Simulator registration proves packaging and target discovery, not real protection. Signed physical-iPhone enablement, unknown-sender message fixtures, Safari permission prompts, and false-positive review remain required.

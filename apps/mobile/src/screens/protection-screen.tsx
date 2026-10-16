@@ -8,6 +8,7 @@ import { StatusPill } from '@/components/status-pill';
 import { Surface } from '@/components/surface';
 import { VendorIcon } from '@/components/vendor-icon';
 import { protectionModules } from '@/domain/protection';
+import { useSmsProtectionHeartbeat } from '@/hooks/use-sms-protection';
 import { colors } from '@/theme';
 
 const vendorFor = (id: string) => id as 'gmail' | 'outlook' | 'safari' | 'chrome' | 'sms' | 'network' | 'family';
@@ -21,10 +22,11 @@ const descriptionFor = (id: string) => {
 
 export default function ProtectionScreen() {
   const insets = useSafeAreaInsets();
+  const smsHeartbeat = useSmsProtectionHeartbeat();
   const goBack = () => router.canGoBack() ? router.back() : router.replace('/');
   return <Screen contentContainerStyle={{ paddingTop: insets.top + 8, gap: 10 }}>
     <View style={{ minHeight: 48, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}><Pressable onPress={goBack} hitSlop={12} accessibilityRole="button" accessibilityLabel="Geri" style={{ position: 'absolute', left: 0 }}><N0Symbol name="arrow.left" size={26} tintColor={colors.text} /></Pressable><N0Text variant="title">Koruma Merkezi</N0Text></View>
-    <View style={{ gap: 0 }}>{protectionModules.map((module, index) => <Pressable key={module.id} onPress={() => router.push({ pathname: '/module/[id]', params: { id: module.id } })} style={({ pressed }) => ({ opacity: pressed ? 0.68 : 1, marginTop: index === 0 ? 0 : -1 })}><Surface style={{ minHeight: 79, borderRadius: index === 0 || index === protectionModules.length - 1 ? 16 : 12, flexDirection: 'row', alignItems: 'center', gap: 14, paddingHorizontal: 16 }}><VendorIcon vendor={vendorFor(module.id)} size={48} /><View style={{ flex: 1, gap: 3 }}><N0Text variant="headline" style={{ fontSize: 14 }}>{module.name === 'Ağ Koruması' ? 'Ağ Koruması (VPN)' : module.name === 'Mesaj Koruması' ? 'Mesaj Koruması (SMS)' : module.name}</N0Text><N0Text variant="small">{descriptionFor(module.id)}</N0Text></View><StatusPill tone={module.state === 'NOT_SUPPORTED' ? 'warning' : 'neutral'} label={module.id === 'sms' || module.id === 'safari' ? 'Yapılandır' : module.state === 'NOT_SUPPORTED' ? 'Yakında' : 'Bağla'} /></Surface></Pressable>)}</View>
+    <View style={{ gap: 0 }}>{protectionModules.map((module, index) => { const smsVerified = module.id === 'sms' && smsHeartbeat?.fresh; return <Pressable key={module.id} onPress={() => router.push({ pathname: '/module/[id]', params: { id: module.id } })} style={({ pressed }) => ({ opacity: pressed ? 0.68 : 1, marginTop: index === 0 ? 0 : -1 })}><Surface style={{ minHeight: 79, borderRadius: index === 0 || index === protectionModules.length - 1 ? 16 : 12, flexDirection: 'row', alignItems: 'center', gap: 14, paddingHorizontal: 16 }}><VendorIcon vendor={vendorFor(module.id)} size={48} /><View style={{ flex: 1, gap: 3 }}><N0Text variant="headline" style={{ fontSize: 14 }}>{module.name === 'Ağ Koruması' ? 'Ağ Koruması (VPN)' : module.name === 'Mesaj Koruması' ? 'Mesaj Koruması (SMS)' : module.name}</N0Text><N0Text variant="small">{descriptionFor(module.id)}</N0Text></View><StatusPill tone={smsVerified ? 'brand' : module.state === 'NOT_SUPPORTED' ? 'warning' : 'neutral'} label={smsVerified ? 'Son olay doğrulandı' : module.id === 'sms' || module.id === 'safari' ? 'Yapılandır' : module.state === 'NOT_SUPPORTED' ? 'Yakında' : 'Bağla'} /></Surface></Pressable>; })}</View>
     <N0Text variant="caption" style={{ textAlign: 'center', paddingTop: 2 }}>Modüller canlı doğrulama olmadan aktif gösterilmez.</N0Text>
   </Screen>;
 }

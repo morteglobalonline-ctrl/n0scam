@@ -21,6 +21,9 @@ until signed physical-device acceptance has been completed.
 - Extension point: Apple IdentityLookup message filter
 - Runs only for messages that iOS presents from unknown senders.
 - Keeps the message body on device and does not log, persist, or upload it.
+- Writes only `sms.lastEvaluationAt`, a millisecond timestamp, to the shared App
+  Group after iOS invokes the extension. The containing app uses this as evidence
+  of recent execution, not as proof that the Settings toggle remains enabled.
 - Returns `.junk` only when a suspicious destination and at least two
   independent pressure categories cross the high-confidence threshold.
 - Returns `.none` for ordinary, ambiguous, or copy-only messages.

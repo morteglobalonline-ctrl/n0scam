@@ -11,6 +11,7 @@
     "expo": "~57.0.30",
     "expo-camera": "~57.0.6",
     "expo-constants": "~57.0.21",
+    "expo-crypto": "~57.0.4",
     "expo-dev-client": "~57.0.20",
     "expo-device": "~57.0.2",
     "expo-font": "~57.0.4",
@@ -48,7 +49,7 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --test src/domain/history.test.mjs src/domain/intake.test.mjs src/domain/protection.test.mjs src/domain/risk.test.mjs src/services/risk-api.test.mjs"
+    "test": "node --experimental-strip-types --test src/domain/history.test.mjs src/domain/intake.test.mjs src/domain/protection.test.mjs src/domain/risk.test.mjs src/services/connector-api.test.mjs src/services/risk-api.test.mjs"
   },
   "private": true
 }

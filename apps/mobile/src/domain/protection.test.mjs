@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { protectionModules } from './protection.ts';
+import { parseSmsHeartbeat, protectionModules } from './protection.ts';
 
 test('keeps protection modules in the approved UI order', () => {
   assert.deepEqual(
@@ -20,4 +20,12 @@ test('provides physical-device setup gates for implemented iOS extensions', () =
     assert.ok(module.setupSteps?.length >= 3);
     assert.equal(module.state, 'NOT_CONFIGURED');
   }
+});
+
+test('accepts only bounded, recent SMS extension heartbeat timestamps', () => {
+  const now = Date.UTC(2026, 9, 16);
+  assert.deepEqual(parseSmsHeartbeat(String(now - 60_000), now), { lastEvaluatedAt: now - 60_000, fresh: true });
+  assert.equal(parseSmsHeartbeat(String(now - 31 * 24 * 60 * 60 * 1000), now)?.fresh, false);
+  assert.equal(parseSmsHeartbeat('not-a-time', now), null);
+  assert.equal(parseSmsHeartbeat(String(now + 10 * 60 * 1000), now), null);
 });

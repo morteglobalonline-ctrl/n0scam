@@ -7,5 +7,14 @@
 - Keep every connector separately revocable.
 - Provide data export and account/data deletion before public release.
 - Do not send content to a third party until the user has received a purpose-specific disclosure.
+- The SMS Message Filter App Group may contain only a last-execution timestamp.
+  It must never contain sender data, message text, classifier signals, or the
+  filtering outcome.
+- Google OAuth authorization codes are transient. Provider access and refresh
+  tokens must remain in an encrypted connector-service vault and must never be
+  stored in the mobile app. Gmail disconnect revokes and deletes that material.
+- Gmail message content must not be collected merely because a mailbox is
+  connected. Scope, data access, retention, and deletion must match a separately
+  reviewed, disclosed feature purpose.
 
 The current MVP performs its preliminary URL heuristics on device and does not include production analytics or a remote risk service.
