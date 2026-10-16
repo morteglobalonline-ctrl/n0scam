@@ -22,6 +22,14 @@
 3. The app stops scanning, displays the exact payload, and routes it through the same preliminary URL logic when appropriate.
 4. No URL, deep link, Wi-Fi profile, payment request, or contact card is executed automatically.
 
+## User-approved local history
+
+1. Analysis is transient by default.
+2. A record is created only after the user taps `Geçmişe Kaydet` on the detailed result.
+3. URL records retain only the hostname. Message records use a generic label; message bodies and non-URL QR payloads are not stored.
+4. Risk state, evidence count, type, and timestamp remain in the app sandboxed SQLite database.
+5. The store keeps at most 200 records and each record can be removed through an explicit destructive confirmation.
+
 ## Future email connector
 
 OAuth PKCE starts from mobile, tokens terminate at the backend vault, provider webhooks enqueue a minimal event, and the backend retrieves only the fields required for analysis. Raw content is deleted according to the approved retention policy.

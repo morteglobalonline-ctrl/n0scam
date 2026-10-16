@@ -4,7 +4,8 @@
 
 - App starts to a real route and all five tabs are reachable.
 - No module is labelled `ACTIVE` without verification.
-- Empty history is not populated with fake incidents.
+- Empty history is not populated with fake incidents. A record appears only after the user explicitly chooses `Geçmişe Kaydet`.
+- Local history stores bounded metadata only: URL hostname or a generic message/QR label, risk state, evidence count, and timestamp. Raw message bodies and full URLs are not persisted.
 - Invalid or blank URL input is rejected.
 - QR permission denial retains manual alternatives.
 - A scanned QR payload does not automatically open an external app or browser.

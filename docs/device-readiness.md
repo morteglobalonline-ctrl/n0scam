@@ -50,5 +50,6 @@ Expo Go is not an acceptance environment for the native-extension work. Those ta
 - EAS iOS simulator build `5bfa3892-6eb4-4124-bf4f-01e368e331a4` finished from commit `99ff847` with all three native targets: Safari, Message Filter, and Share.
 - The three installed bundles registered in the iOS 26.2 simulator as `com.morteglobalonline.n0scam.safari`, `com.morteglobalonline.n0scam.message-filter`, and `com.morteglobalonline.n0scam.share`; the containing app still declares no microphone usage.
 - Safari displayed the n0scam action in its system share sheet. The Share Extension opened the shared `https://example.com/` value, waited for an explicit `Analiz Et` action, and rendered its local uncertainty result with the analytical-not-advice disclosure.
+- A local iOS 26.2 Release build linked `expo-sqlite` together with all three extensions and launched successfully. A high-risk URL result was explicitly saved, appeared in the Link/Tümü history as hostname-only metadata, and exposed a separate removal confirmation.
 
 Simulator registration proves packaging and target discovery, not real protection. Signed physical-iPhone enablement, unknown-sender message fixtures, Safari permission prompts, and false-positive review remain required.

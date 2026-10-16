@@ -25,6 +25,7 @@ const androidIcons: Record<string, MaterialName> = {
   'doc.fill': 'insert-drive-file',
   'doc.text.fill': 'description',
   'envelope.fill': 'email',
+  ellipsis: 'more-horiz',
   exclamationmark: 'error-outline',
   'exclamationmark.circle.fill': 'error',
   'exclamationmark.triangle.fill': 'warning',

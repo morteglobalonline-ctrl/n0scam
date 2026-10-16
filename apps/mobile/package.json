@@ -21,6 +21,7 @@
     "expo-linking": "~57.0.13",
     "expo-router": "~57.0.28",
     "expo-splash-screen": "~57.0.10",
+    "expo-sqlite": "~57.0.4",
     "expo-status-bar": "~57.0.1",
     "expo-symbols": "~57.0.3",
     "expo-system-ui": "~57.0.4",
@@ -47,7 +48,7 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --test src/domain/intake.test.mjs src/domain/protection.test.mjs src/domain/risk.test.mjs src/services/risk-api.test.mjs"
+    "test": "node --experimental-strip-types --test src/domain/history.test.mjs src/domain/intake.test.mjs src/domain/protection.test.mjs src/domain/risk.test.mjs src/services/risk-api.test.mjs"
   },
   "private": true
 }
