@@ -64,3 +64,10 @@ export function getMailConnectionHealth(status: MailHealthStatus, now = Date.now
   if (!Number.isFinite(checkedAt) || checkedAt > now + 5 * 60 * 1000 || now - checkedAt > mailHealthFreshnessMs) return 'DEGRADED' as const;
   return 'VERIFIED' as const;
 }
+
+export function parseSafariExtensionState(value: unknown) {
+  if (!value || typeof value !== 'object') return 'UNAVAILABLE' as const;
+  const candidate = value as Record<string, unknown>;
+  if (candidate.available !== true) return 'UNAVAILABLE' as const;
+  return candidate.enabled === true ? 'ENABLED' as const : 'DISABLED' as const;
+}

@@ -13,6 +13,11 @@ until signed physical-device acceptance has been completed.
 - Performs a deterministic local pre-check without fetching, storing, logging,
   redirecting, or automatically opening the URL.
 - Unknown or low-signal URLs are never described as safe.
+- On iOS 26.2 and later, the containing app reads the current enablement state
+  through `SFSafariExtensionManager`. Only the `available` and `enabled`
+  booleans cross the native bridge; browsing data never does.
+- On earlier iOS versions the system API is unavailable, so the app keeps the
+  module in an honest setup/unknown state instead of claiming protection.
 
 ## Message Filter Extension
 
@@ -58,6 +63,7 @@ npx expo prebuild --platform ios --clean --no-install
 xcodebuild -project ios/n0scam.xcodeproj -target n0scamSafari -configuration Debug -sdk iphonesimulator CODE_SIGNING_ALLOWED=NO build
 xcodebuild -project ios/n0scam.xcodeproj -target n0scamMessageFilter -configuration Debug -sdk iphonesimulator CODE_SIGNING_ALLOWED=NO build
 xcodebuild -project ios/n0scam.xcodeproj -target n0scamShare -configuration Debug -sdk iphonesimulator CODE_SIGNING_ALLOWED=NO build
+xcodebuild -workspace ios/n0scam.xcworkspace -scheme SafariExtensionState -configuration Release -sdk iphonesimulator CODE_SIGNING_ALLOWED=NO build
 ```
 
 Run the deterministic message-filter test fixture on macOS:

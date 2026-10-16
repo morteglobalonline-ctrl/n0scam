@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { getMailConnectionHealth, parseSmsHeartbeat, protectionModules } from './protection.ts';
+import { getMailConnectionHealth, parseSafariExtensionState, parseSmsHeartbeat, protectionModules } from './protection.ts';
 
 test('keeps protection modules in the approved UI order', () => {
   assert.deepEqual(
@@ -37,4 +37,12 @@ test('requires a recent mail health check before presenting a connection as veri
   assert.equal(getMailConnectionHealth({ state: 'DEGRADED', lastHealthCheckAt: new Date(now).toISOString() }, now), 'DEGRADED');
   assert.equal(getMailConnectionHealth({ state: 'CONNECTED', lastHealthCheckAt: new Date(now - 60_000).toISOString() }, now), 'VERIFIED');
   assert.equal(getMailConnectionHealth({ state: 'CONNECTED', lastHealthCheckAt: new Date(now - 25 * 60 * 60 * 1000).toISOString() }, now), 'DEGRADED');
+});
+
+test('accepts only an explicit native Safari extension state', () => {
+  assert.equal(parseSafariExtensionState({ available: true, enabled: true }), 'ENABLED');
+  assert.equal(parseSafariExtensionState({ available: true, enabled: false }), 'DISABLED');
+  assert.equal(parseSafariExtensionState({ available: false, enabled: true }), 'UNAVAILABLE');
+  assert.equal(parseSafariExtensionState({ enabled: true }), 'UNAVAILABLE');
+  assert.equal(parseSafariExtensionState(null), 'UNAVAILABLE');
 });

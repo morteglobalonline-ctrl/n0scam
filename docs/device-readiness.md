@@ -30,7 +30,7 @@ The repository is linked to the existing Expo project `@haqd/n0scam` with projec
 
 ## Native protection roadmap
 
-1. Safari Web Extension signed physical-device validation and enablement onboarding. The CNG/EAS target exists with only `activeTab` permission.
+1. Safari Web Extension signed physical-device validation and enablement onboarding. The CNG/EAS target exists with only `activeTab` permission. On iOS 26.2+, the app now reads the current extension enablement through a private local Expo module; earlier iOS versions remain setup/unknown because Apple does not expose that API there.
 2. IdentityLookup Message Filter Extension signed physical-device validation and enablement onboarding. The local-only, conservative target exists for unknown-sender SMS/MMS; it does not cover iMessage or contacts. Its App Group heartbeat stores only the most recent extension execution timestamp, never the sender, message body, risk signals, or filter disposition. Because iOS does not expose the current Settings toggle to the containing app, a heartbeat proves recent execution but is not presented as current enablement.
 3. URL Filter / Network Extension proof of concept with the required Apple capability and privacy-preserving rule service.
 4. Share Extension signed physical-device validation for user-invoked, local analysis of URLs and plain text. The target exists and deliberately does not advertise file, image, or movie access.
@@ -73,5 +73,10 @@ Expo Go is not an acceptance environment for the native-extension work. Those ta
   IdentityLookup invocation and the resulting heartbeat still require a signed
   physical iPhone because the simulator cannot stand in for the Messages
   Settings and unknown-sender delivery path.
+- A private `SafariExtensionState` Expo module autolinked into the iOS app and
+  compiled in both its Release scheme and the full Release app. On an iOS 26.2
+  iPhone 17 Pro simulator, the installed app queried the system state and kept
+  Safari at `Yapılandır / Kurulum gerekli` while the extension was disabled.
+  The check exposes no URL or browsing history and never infers enablement.
 
 Simulator registration proves packaging and target discovery, not real protection. Signed physical-iPhone enablement, unknown-sender message fixtures, Safari permission prompts, and false-positive review remain required.

@@ -8,7 +8,7 @@ Status: initial technical assessment. No entitlement or store approval is assume
 | Manual URL | On-device normalization + future Risk API | Network only for remote analysis | Local preliminary analyzer implemented | Preliminary analysis |
 | Manual message | Paste/share text + future content API | Share extension for local cross-app analysis | UI plus local native Share Extension implemented; physical-device acceptance pending | Not configured until verified on device |
 | Shared URL/text | Native Share Extension | App extension, provisioning, share-sheet acceptance | Bounded local analyzer implemented; no file/image/movie access | Not configured until verified on device |
-| Safari | Safari Web Extension | App extension, provisioning, review | CNG/EAS target implemented; physical-device acceptance pending | Not configured until verified on device |
+| Safari | Safari Web Extension | App extension, provisioning, review | CNG/EAS target plus live iOS 26.2+ enablement query implemented; physical-device acceptance pending | Current system state on iOS 26.2+; setup/unknown on older iOS |
 | URL filtering | Network Extension URL Filter investigation | Apple entitlement | Not validated | Not supported yet |
 | Unknown-sender SMS/MMS | IdentityLookup Message Filter Extension | App extension, App Group, provisioning, Settings enablement, false-positive review | Conservative local CNG/EAS target plus content-free execution heartbeat implemented; physical-device acceptance pending | Last execution may be verified, but enablement is not claimed |
 | Gmail | OAuth PKCE + Gmail API watch backend | Restricted-scope verification | Mobile PKCE/status/revoke flow implemented; connector backend and Google OAuth client not configured | Connection service required |
