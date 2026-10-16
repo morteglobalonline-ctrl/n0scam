@@ -1,15 +1,19 @@
-export type GmailConnectionStatus =
+export type MailConnectionStatus =
   | { state: 'DISCONNECTED' }
   | { state: 'CONNECTED' | 'DEGRADED'; accountLabel: string; connectedAt: string; lastHealthCheckAt: string | null };
 
-export type BeginGmailConnectionRequest = {
+export type GmailConnectionStatus = MailConnectionStatus;
+export type OutlookConnectionStatus = MailConnectionStatus;
+export type MailProvider = 'gmail' | 'outlook';
+
+export type BeginMailConnectionRequest = {
   redirectUri: string;
   codeChallenge: string;
   state: string;
   locale: string;
 };
 
-export type CompleteGmailConnectionRequest = {
+export type CompleteMailConnectionRequest = {
   redirectUri: string;
   code: string;
   codeVerifier: string;
@@ -46,7 +50,7 @@ function isIsoDate(value: unknown) {
   return typeof value === 'string' && Number.isFinite(Date.parse(value));
 }
 
-function parseStatus(value: unknown): GmailConnectionStatus | null {
+function parseStatus(value: unknown): MailConnectionStatus | null {
   if (!value || typeof value !== 'object') return null;
   const candidate = value as Record<string, unknown>;
   if (candidate.state === 'DISCONNECTED') return { state: 'DISCONNECTED' };
@@ -90,51 +94,64 @@ export class ConnectorApiClient {
         headers: { Accept: 'application/json', ...(init.body ? { 'Content-Type': 'application/json' } : {}), ...init.headers },
         signal: controller.signal,
       });
-      if (!response.ok) throw new ConnectorApiError('Gmail bağlantı servisi isteği reddetti.', 'HTTP', response.status);
+      if (!response.ok) throw new ConnectorApiError('E-posta bağlantı servisi isteği reddetti.', 'HTTP', response.status);
       const raw = await response.text();
-      if (raw.length > 64_000) throw new ConnectorApiError('Gmail bağlantı yanıtı beklenenden büyük.', 'INVALID_RESPONSE');
-      try { return raw ? JSON.parse(raw) as unknown : null; } catch { throw new ConnectorApiError('Gmail bağlantı yanıtı okunamadı.', 'INVALID_RESPONSE'); }
+      if (raw.length > 64_000) throw new ConnectorApiError('E-posta bağlantı yanıtı beklenenden büyük.', 'INVALID_RESPONSE');
+      try { return raw ? JSON.parse(raw) as unknown : null; } catch { throw new ConnectorApiError('E-posta bağlantı yanıtı okunamadı.', 'INVALID_RESPONSE'); }
     } catch (cause) {
       if (cause instanceof ConnectorApiError) throw cause;
       if (controller.signal.aborted) throw new ConnectorApiError('Gmail bağlantı isteği zaman aşımına uğradı.', 'TIMEOUT');
-      throw new ConnectorApiError('Gmail bağlantı servisine ulaşılamadı.', 'NETWORK');
+      throw new ConnectorApiError('E-posta bağlantı servisine ulaşılamadı.', 'NETWORK');
     } finally {
       clearTimeout(timeout);
       signal?.removeEventListener('abort', relayAbort);
     }
   }
 
-  async getGmailStatus(signal?: AbortSignal) {
-    const parsed = parseStatus(await this.request('v1/connectors/gmail/status', { method: 'GET' }, signal));
-    if (!parsed) throw new ConnectorApiError('Gmail durum yanıtı beklenen sözleşmeyle eşleşmiyor.', 'INVALID_RESPONSE');
+  private async getMailStatus(provider: MailProvider, signal?: AbortSignal) {
+    const parsed = parseStatus(await this.request(`v1/connectors/${provider}/status`, { method: 'GET' }, signal));
+    if (!parsed) throw new ConnectorApiError('E-posta durum yanıtı beklenen sözleşmeyle eşleşmiyor.', 'INVALID_RESPONSE');
     return parsed;
   }
 
-  async beginGmailConnection(request: BeginGmailConnectionRequest, signal?: AbortSignal) {
-    const value = await this.request('v1/connectors/gmail/authorize', { method: 'POST', body: JSON.stringify(request) }, signal);
+  private async beginMailConnection(provider: MailProvider, request: BeginMailConnectionRequest, signal?: AbortSignal) {
+    const value = await this.request(`v1/connectors/${provider}/authorize`, { method: 'POST', body: JSON.stringify(request) }, signal);
     const authorizationUrl = value && typeof value === 'object' ? (value as Record<string, unknown>).authorizationUrl : null;
-    if (typeof authorizationUrl !== 'string' || authorizationUrl.length > 8_192) throw new ConnectorApiError('Gmail yetkilendirme yanıtı geçersiz.', 'INVALID_RESPONSE');
+    if (typeof authorizationUrl !== 'string' || authorizationUrl.length > 8_192) throw new ConnectorApiError('E-posta yetkilendirme yanıtı geçersiz.', 'INVALID_RESPONSE');
     let parsed: URL;
-    try { parsed = new URL(authorizationUrl); } catch { throw new ConnectorApiError('Gmail yetkilendirme adresi geçersiz.', 'INVALID_RESPONSE'); }
+    try { parsed = new URL(authorizationUrl); } catch { throw new ConnectorApiError('E-posta yetkilendirme adresi geçersiz.', 'INVALID_RESPONSE'); }
     const oauthParamsMatch = parsed.searchParams.get('response_type') === 'code'
       && parsed.searchParams.get('redirect_uri') === request.redirectUri
       && parsed.searchParams.get('state') === request.state
       && parsed.searchParams.get('code_challenge') === request.codeChallenge
       && parsed.searchParams.get('code_challenge_method') === 'S256'
       && Boolean(parsed.searchParams.get('client_id'));
-    if (parsed.protocol !== 'https:' || parsed.hostname !== 'accounts.google.com' || parsed.pathname !== '/o/oauth2/v2/auth' || !oauthParamsMatch) throw new ConnectorApiError('Gmail yetkilendirme adresi güvenlik sözleşmesiyle eşleşmiyor.', 'INVALID_RESPONSE');
+    const destinationMatches = provider === 'gmail'
+      ? parsed.hostname === 'accounts.google.com' && parsed.pathname === '/o/oauth2/v2/auth'
+      : parsed.hostname === 'login.microsoftonline.com' && parsed.pathname === '/common/oauth2/v2.0/authorize';
+    if (parsed.protocol !== 'https:' || !destinationMatches || !oauthParamsMatch) throw new ConnectorApiError('E-posta yetkilendirme adresi güvenlik sözleşmesiyle eşleşmiyor.', 'INVALID_RESPONSE');
     return authorizationUrl;
   }
 
-  async completeGmailConnection(request: CompleteGmailConnectionRequest, signal?: AbortSignal) {
-    const parsed = parseStatus(await this.request('v1/connectors/gmail/complete', { method: 'POST', body: JSON.stringify(request) }, signal));
-    if (!parsed || parsed.state === 'DISCONNECTED') throw new ConnectorApiError('Gmail bağlantı sonucu doğrulanamadı.', 'INVALID_RESPONSE');
+  private async completeMailConnection(provider: MailProvider, request: CompleteMailConnectionRequest, signal?: AbortSignal) {
+    const parsed = parseStatus(await this.request(`v1/connectors/${provider}/complete`, { method: 'POST', body: JSON.stringify(request) }, signal));
+    if (!parsed || parsed.state === 'DISCONNECTED') throw new ConnectorApiError('E-posta bağlantı sonucu doğrulanamadı.', 'INVALID_RESPONSE');
     return parsed;
   }
 
-  async disconnectGmail(signal?: AbortSignal) {
-    await this.request('v1/connectors/gmail', { method: 'DELETE' }, signal);
+  private async disconnectMail(provider: MailProvider, signal?: AbortSignal) {
+    await this.request(`v1/connectors/${provider}`, { method: 'DELETE' }, signal);
   }
+
+  getGmailStatus(signal?: AbortSignal) { return this.getMailStatus('gmail', signal); }
+  beginGmailConnection(request: BeginMailConnectionRequest, signal?: AbortSignal) { return this.beginMailConnection('gmail', request, signal); }
+  completeGmailConnection(request: CompleteMailConnectionRequest, signal?: AbortSignal) { return this.completeMailConnection('gmail', request, signal); }
+  disconnectGmail(signal?: AbortSignal) { return this.disconnectMail('gmail', signal); }
+
+  getOutlookStatus(signal?: AbortSignal) { return this.getMailStatus('outlook', signal); }
+  beginOutlookConnection(request: BeginMailConnectionRequest, signal?: AbortSignal) { return this.beginMailConnection('outlook', request, signal); }
+  completeOutlookConnection(request: CompleteMailConnectionRequest, signal?: AbortSignal) { return this.completeMailConnection('outlook', request, signal); }
+  disconnectOutlook(signal?: AbortSignal) { return this.disconnectMail('outlook', signal); }
 }
 
 export const connectorApi = new ConnectorApiClient({ baseUrl: process.env.EXPO_PUBLIC_CONNECTOR_API_URL });

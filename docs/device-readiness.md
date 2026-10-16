@@ -34,7 +34,7 @@ The repository is linked to the existing Expo project `@haqd/n0scam` with projec
 2. IdentityLookup Message Filter Extension signed physical-device validation and enablement onboarding. The local-only, conservative target exists for unknown-sender SMS/MMS; it does not cover iMessage or contacts. Its App Group heartbeat stores only the most recent extension execution timestamp, never the sender, message body, risk signals, or filter disposition. Because iOS does not expose the current Settings toggle to the containing app, a heartbeat proves recent execution but is not presented as current enablement.
 3. URL Filter / Network Extension proof of concept with the required Apple capability and privacy-preserving rule service.
 4. Share Extension signed physical-device validation for user-invoked, local analysis of URLs and plain text. The target exists and deliberately does not advertise file, image, or movie access.
-5. Deploy and validate the Gmail contract in `docs/gmail-connector.md`; then implement Outlook with the same server-side token-vault, health, revoke, and deletion guarantees.
+5. Deploy and validate the Gmail and Outlook contracts in `docs/gmail-connector.md` and `docs/outlook-connector.md` with server-side token-vault, health, revoke, and deletion guarantees.
 6. Versioned live Risk API with threat feeds, redirect isolation, rate limiting, evidence provenance, and offline fallback.
 7. APNs/FCM notifications, secure local history, account export/deletion, privacy labels, and store review evidence.
 
@@ -65,6 +65,9 @@ Expo Go is not an acceptance environment for the native-extension work. Those ta
 - The Gmail connection screen launched from the protection module in the
   installed Release build. With no connector API configured, it rendered the
   disabled connection state and did not fabricate an account or active status.
+- The Outlook connection screen also launched from its protection module after
+  the shared mail-connector refactor. It rendered the provider-specific Entra
+  setup requirement and disabled OAuth action without a configured backend.
 - App Group entitlement/packaging is proven in the simulator. A genuine
   IdentityLookup invocation and the resulting heartbeat still require a signed
   physical iPhone because the simulator cannot stand in for the Messages

@@ -16,5 +16,8 @@
 - Gmail message content must not be collected merely because a mailbox is
   connected. Scope, data access, retention, and deletion must match a separately
   reviewed, disclosed feature purpose.
+- The same mailbox rules apply to Outlook/Microsoft Graph. Use delegated
+  permissions and never request application-wide mailbox access for the mobile
+  consumer product.
 
 The current MVP performs its preliminary URL heuristics on device and does not include production analytics or a remote risk service.
