@@ -7,6 +7,7 @@ import { N0Text } from '@/components/n0-text';
 import { Screen } from '@/components/screen';
 import { StatusPill } from '@/components/status-pill';
 import { Surface } from '@/components/surface';
+import { getMailConnectionHealth } from '@/domain/protection';
 import { connectorApi, ConnectorApiError, type MailConnectionStatus, type MailProvider } from '@/services/connector-api';
 import { connectMail } from '@/services/mail-oauth';
 import { colors, radius, spacing } from '@/theme';
@@ -60,8 +61,9 @@ export function MailConnectionScreen({ provider }: { provider: MailProvider }) {
   ]);
 
   const connected = status?.state === 'CONNECTED' || status?.state === 'DEGRADED';
+  const health = getMailConnectionHealth(status);
   return <Screen contentContainerStyle={{ gap: spacing.lg }}>
-    <View style={{ alignItems: 'center', gap: 10, paddingVertical: spacing.md }}><View style={{ width: 76, height: 76, borderRadius: radius.full, backgroundColor: colors.brandWash, borderWidth: 1, borderColor: colors.brand, alignItems: 'center', justifyContent: 'center' }}><N0Symbol name={copy.icon} size={35} /></View><N0Text variant="heading">{copy.name} Koruması</N0Text><StatusPill tone={status?.state === 'CONNECTED' ? 'brand' : status?.state === 'DEGRADED' ? 'warning' : 'neutral'} label={status?.state === 'CONNECTED' ? 'Bağlı' : status?.state === 'DEGRADED' ? 'Kontrol gerekli' : 'Bağlı değil'} /></View>
+    <View style={{ alignItems: 'center', gap: 10, paddingVertical: spacing.md }}><View style={{ width: 76, height: 76, borderRadius: radius.full, backgroundColor: colors.brandWash, borderWidth: 1, borderColor: colors.brand, alignItems: 'center', justifyContent: 'center' }}><N0Symbol name={copy.icon} size={35} /></View><N0Text variant="heading">{copy.name} Koruması</N0Text><StatusPill tone={health === 'VERIFIED' ? 'brand' : health === 'DEGRADED' ? 'warning' : 'neutral'} label={health === 'VERIFIED' ? 'Bağlı' : health === 'DEGRADED' ? 'Kontrol gerekli' : 'Bağlı değil'} /></View>
 
     {connected ? <Surface style={{ gap: spacing.sm }}><N0Text variant="headline">Bağlı hesap</N0Text><N0Text variant="body" style={{ color: colors.text }}>{status.accountLabel}</N0Text><N0Text variant="small">Bağlantı: {new Date(status.connectedAt).toLocaleString('tr-TR')}</N0Text><N0Text variant="small">Son sağlık kontrolü: {status.lastHealthCheckAt ? new Date(status.lastHealthCheckAt).toLocaleString('tr-TR') : 'Henüz doğrulanmadı'}</N0Text></Surface> : null}
 

@@ -37,6 +37,8 @@ Graph health check, and mask `accountLabel`.
 Disconnect must revoke/delete provider token material and remove Graph
 subscription/watch state. `CONNECTED` requires a recent successful token and
 provider health check; expired subscriptions or rejected tokens are `DEGRADED`.
+The mobile client independently downgrades any missing or older-than-24-hours
+health-check timestamp instead of displaying the connector as verified.
 
 ## Microsoft release gates
 

@@ -49,3 +49,18 @@ export function parseSmsHeartbeat(raw: string | null, now = Date.now()) {
   if (!Number.isSafeInteger(lastEvaluatedAt) || lastEvaluatedAt <= 0 || lastEvaluatedAt > now + 5 * 60 * 1000) return null;
   return { lastEvaluatedAt, fresh: now - lastEvaluatedAt <= smsHeartbeatFreshnessMs };
 }
+
+type MailHealthStatus =
+  | null
+  | { state: 'DISCONNECTED' }
+  | { state: 'CONNECTED' | 'DEGRADED'; lastHealthCheckAt: string | null };
+
+const mailHealthFreshnessMs = 24 * 60 * 60 * 1000;
+
+export function getMailConnectionHealth(status: MailHealthStatus, now = Date.now()) {
+  if (!status || status.state === 'DISCONNECTED') return 'DISCONNECTED' as const;
+  if (status.state === 'DEGRADED' || !status.lastHealthCheckAt) return 'DEGRADED' as const;
+  const checkedAt = Date.parse(status.lastHealthCheckAt);
+  if (!Number.isFinite(checkedAt) || checkedAt > now + 5 * 60 * 1000 || now - checkedAt > mailHealthFreshnessMs) return 'DEGRADED' as const;
+  return 'VERIFIED' as const;
+}

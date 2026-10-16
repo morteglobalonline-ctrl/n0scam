@@ -51,7 +51,9 @@ Connected or degraded:
 
 `accountLabel` should be masked. `CONNECTED` requires a recent successful token
 and provider health check; an expired watch, rejected token, or provider error
-must produce `DEGRADED` rather than a false healthy state.
+must produce `DEGRADED` rather than a false healthy state. As an additional
+client-side guard, the app presents a connection as verified only when the
+health-check timestamp is no more than 24 hours old.
 
 ### `POST /v1/connectors/gmail/authorize`
 

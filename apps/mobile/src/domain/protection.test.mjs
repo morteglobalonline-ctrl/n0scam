@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { parseSmsHeartbeat, protectionModules } from './protection.ts';
+import { getMailConnectionHealth, parseSmsHeartbeat, protectionModules } from './protection.ts';
 
 test('keeps protection modules in the approved UI order', () => {
   assert.deepEqual(
@@ -28,4 +28,13 @@ test('accepts only bounded, recent SMS extension heartbeat timestamps', () => {
   assert.equal(parseSmsHeartbeat(String(now - 31 * 24 * 60 * 60 * 1000), now)?.fresh, false);
   assert.equal(parseSmsHeartbeat('not-a-time', now), null);
   assert.equal(parseSmsHeartbeat(String(now + 10 * 60 * 1000), now), null);
+});
+
+test('requires a recent mail health check before presenting a connection as verified', () => {
+  const now = Date.UTC(2026, 9, 16);
+  assert.equal(getMailConnectionHealth(null, now), 'DISCONNECTED');
+  assert.equal(getMailConnectionHealth({ state: 'CONNECTED', lastHealthCheckAt: null }, now), 'DEGRADED');
+  assert.equal(getMailConnectionHealth({ state: 'DEGRADED', lastHealthCheckAt: new Date(now).toISOString() }, now), 'DEGRADED');
+  assert.equal(getMailConnectionHealth({ state: 'CONNECTED', lastHealthCheckAt: new Date(now - 60_000).toISOString() }, now), 'VERIFIED');
+  assert.equal(getMailConnectionHealth({ state: 'CONNECTED', lastHealthCheckAt: new Date(now - 25 * 60 * 60 * 1000).toISOString() }, now), 'DEGRADED');
 });
