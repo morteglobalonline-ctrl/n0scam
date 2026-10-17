@@ -6,7 +6,7 @@ Status: initial technical assessment. No entitlement or store approval is assume
 | --- | --- | --- | --- | --- |
 | QR | `expo-camera` barcode scanning | Camera permission | MVP implemented | Available after permission |
 | Manual URL | On-device normalization + future Risk API | Network only for remote analysis | Local preliminary analyzer implemented | Preliminary analysis |
-| Manual message | Paste/share text + future content API | Share extension for local cross-app analysis | UI plus local native Share Extension implemented; physical-device acceptance pending | Not configured until verified on device |
+| Manual message | Paste/share text + future content API | Share extension for local cross-app analysis | Text, on-device iOS screenshot OCR, bounded PDF/text extraction, and local native Share Extension implemented; physical-device acceptance pending | Local preliminary analysis |
 | Shared URL/text | Native Share Extension | App extension, provisioning, share-sheet acceptance | Bounded local analyzer implemented; no file/image/movie access | Not configured until verified on device |
 | Safari | Safari Web Extension | App extension, provisioning, review | CNG/EAS target plus live iOS 26.2+ enablement query implemented; physical-device acceptance pending | Current system state on iOS 26.2+; setup/unknown on older iOS |
 | URL filtering | Network Extension URL Filter investigation | Apple entitlement | Not validated | Not supported yet |

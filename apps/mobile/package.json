@@ -14,6 +14,7 @@
     "expo-crypto": "~57.0.4",
     "expo-dev-client": "~57.0.20",
     "expo-device": "~57.0.2",
+    "expo-document-picker": "~57.0.3",
     "expo-font": "~57.0.4",
     "expo-glass-effect": "~57.0.4",
     "expo-haptics": "~57.0.3",
@@ -49,7 +50,7 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --test src/domain/history.test.mjs src/domain/intake.test.mjs src/domain/protection.test.mjs src/domain/risk.test.mjs src/services/connector-api.test.mjs src/services/risk-api.test.mjs"
+    "test": "node --experimental-strip-types --test src/domain/history.test.mjs src/domain/intake.test.mjs src/domain/protection.test.mjs src/domain/risk.test.mjs src/services/connector-api.test.mjs src/services/document-text.test.mjs src/services/risk-api.test.mjs"
   },
   "private": true
 }

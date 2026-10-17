@@ -19,5 +19,8 @@
 - The same mailbox rules apply to Outlook/Microsoft Graph. Use delegated
   permissions and never request application-wide mailbox access for the mobile
   consumer product.
+- Screenshot OCR and PDF/text extraction run locally through iOS Vision and
+  PDFKit. Selected images, documents, and extracted message bodies remain
+  transient and are not uploaded or written to app history.
 
 The current MVP performs its preliminary URL heuristics on device and does not include production analytics or a remote risk service.

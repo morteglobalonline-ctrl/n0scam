@@ -22,6 +22,18 @@
 3. The app stops scanning, displays the exact payload, and routes it through the same preliminary URL logic when appropriate.
 4. No URL, deep link, Wi-Fi profile, payment request, or contact card is executed automatically.
 
+## Message screenshots and documents
+
+1. The user explicitly selects an image or a supported document.
+2. iOS Vision recognizes screenshot text on device. PDFKit extracts text from
+   at most 20 pages; plain-text inputs are limited to 500 KB.
+3. The native bridge removes null bytes and returns at most 5,000 characters.
+   Images are not uploaded and document contents are not logged or persisted.
+4. Extracted text is shown in an editable field. Analysis begins only after the
+   user taps `Analiz Et`.
+5. History remains opt-in and stores only a generic message label, never the
+   extracted body.
+
 ## User-approved local history
 
 1. Analysis is transient by default.

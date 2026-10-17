@@ -18,7 +18,7 @@ const actions = [
   { title: 'QR Kod\nTara', icon: 'qrcode.viewfinder' as const, route: '/qr-scanner' as const },
   { title: 'Link\nAnaliz Et', icon: 'link' as const, route: '/link-analysis' as const },
   { title: 'Mesaj / E-posta\nKontrol Et', icon: 'doc.text.fill' as const, route: '/message-analysis' as const },
-  { title: 'Fotoğraf\nAnaliz Et', icon: 'photo.fill' as const, route: '/qr-scanner' as const },
+  { title: 'Fotoğraf\nAnaliz Et', icon: 'photo.fill' as const, route: '/message-analysis' as const, mode: 'screenshot' as const },
 ];
 
 const vendorFor = (id: string) => id as 'gmail' | 'outlook' | 'safari' | 'chrome' | 'sms';
@@ -45,7 +45,7 @@ export default function HomeScreen() {
       <N0Text variant="small" style={{ color: colors.textSecondary, textAlign: 'center' }}>{verifiedCount ? `${verifiedCount} modül yakın zamanda doğrulandı. Diğer modüller için kuruluma devam edin.` : 'Manuel tarama hazır. Otomatik modüller henüz bağlı değil.'}</N0Text>
     </Surface>
 
-    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 9 }}>{actions.map((action) => <Pressable key={action.title} onPress={() => router.push(action.route)} accessibilityRole="button" style={({ pressed }) => ({ width: '48.6%', minHeight: 105, backgroundColor: '#02130E', borderColor: pressed ? colors.brand : colors.border, borderWidth: 1, borderRadius: radius.lg, borderCurve: 'continuous', padding: spacing.md, alignItems: 'center', justifyContent: 'center', gap: 9, boxShadow: '0 0 20px rgba(0,255,138,0.045)', opacity: pressed ? 0.68 : 1 })}>
+    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 9 }}>{actions.map((action) => <Pressable key={action.title} onPress={() => action.mode ? router.push({ pathname: action.route, params: { mode: action.mode } }) : router.push(action.route)} accessibilityRole="button" style={({ pressed }) => ({ width: '48.6%', minHeight: 105, backgroundColor: '#02130E', borderColor: pressed ? colors.brand : colors.border, borderWidth: 1, borderRadius: radius.lg, borderCurve: 'continuous', padding: spacing.md, alignItems: 'center', justifyContent: 'center', gap: 9, boxShadow: '0 0 20px rgba(0,255,138,0.045)', opacity: pressed ? 0.68 : 1 })}>
       <N0Symbol name={action.icon} size={31} />
       <N0Text variant="headline" style={{ textAlign: 'center', fontSize: 13, lineHeight: 18 }}>{action.title}</N0Text>
     </Pressable>)}</View>

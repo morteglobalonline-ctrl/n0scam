@@ -2,7 +2,7 @@
 
 ## Current installable scope
 
-The Expo client can be packaged as an iOS or Android development or preview build. QR camera scanning, photo import, manual URL analysis, and manual message analysis are suitable for device testing. The Safari Web Extension, IdentityLookup Message Filter Extension, and local Share Extension now compile as native targets, but remain physical-device acceptance candidates rather than active protection modules. The Gmail mobile PKCE/status/revoke flow is also present, but stays disabled until its connector API is configured.
+The Expo client can be packaged as an iOS or Android development or preview build. QR camera scanning, photo import, manual URL analysis, manual message analysis, on-device iOS screenshot OCR, and bounded PDF/text extraction are suitable for device testing. The Safari Web Extension, IdentityLookup Message Filter Extension, and local Share Extension now compile as native targets, but remain physical-device acceptance candidates rather than active protection modules. The Gmail mobile PKCE/status/revoke flow is also present, but stays disabled until its connector API is configured.
 
 No screen may describe Safari, SMS, email, or network protection as active until its native extension or backend connector has passed a fresh health check on the device.
 
@@ -78,5 +78,14 @@ Expo Go is not an acceptance environment for the native-extension work. Those ta
   iPhone 17 Pro simulator, the installed app queried the system state and kept
   Safari at `Yapılandır / Kurulum gerekli` while the extension was disabled.
   The check exposes no URL or browsing history and never infers enablement.
+- The private `DocumentTextExtractor` Expo module and `expo-document-picker`
+  autolinked successfully. The native module compiled independently and inside
+  the full iOS Release app with Vision, PDFKit, local-file-only validation,
+  bounded file/page sizes, and a 5,000-character output cap.
+- The system photo picker opened its isolated child scene with a simulator
+  screenshot fixture visible. A standalone Apple Vision acceptance harness then
+  recognized the fixture's real Turkish UI and sample-message text. The desktop
+  automation could not complete the final child-scene tap, so selecting that
+  fixture through the app remains part of the physical-device acceptance pass.
 
 Simulator registration proves packaging and target discovery, not real protection. Signed physical-iPhone enablement, unknown-sender message fixtures, Safari permission prompts, and false-positive review remain required.
