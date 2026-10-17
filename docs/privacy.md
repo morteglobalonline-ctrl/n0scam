@@ -34,5 +34,8 @@
   together. It does not pretend to delete a remote account when none exists.
 - The incident-help checklist is fixed, content-free text. Sharing it never adds
   a message, URL, mailbox item, account number, or device identifier.
+- The iOS Share Extension writes only its last successful analysis timestamp to
+  App Group storage. Shared text, URLs, source-app identity, signal count, and
+  result are never persisted there.
 
 The current MVP performs its preliminary URL heuristics on device and does not include production analytics or a remote risk service.

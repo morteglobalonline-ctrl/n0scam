@@ -1,6 +1,9 @@
 import UIKit
 import UniformTypeIdentifiers
 
+private let protectionAppGroup = "group.com.morteglobalonline.n0scam.protection"
+private let lastShareEvaluationKey = "share.lastEvaluationAt"
+
 final class ShareViewController: UIViewController {
     private let previewLabel = UILabel()
     private let resultLabel = UILabel()
@@ -141,6 +144,10 @@ final class ShareViewController: UIViewController {
 
     @objc private func analyze() {
         let assessment = SharedRiskClassifier.classify(sharedValue)
+        // Persist only an execution heartbeat. The shared URL or text, result,
+        // signal count, and destination app are never written to shared storage.
+        let timestamp = Int(Date().timeIntervalSince1970 * 1_000)
+        UserDefaults(suiteName: protectionAppGroup)?.set(timestamp, forKey: lastShareEvaluationKey)
         switch assessment.level {
         case .elevated:
             resultLabel.textColor = UIColor(red: 1, green: 0.23, blue: 0.27, alpha: 1)

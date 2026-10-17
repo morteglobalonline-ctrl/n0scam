@@ -22,7 +22,18 @@ export const protectionModules: ProtectionModule[] = [
       'Safari araç çubuğundan uzantıyı çalıştırıp test adresinde sonucu doğrulayın.',
     ],
   },
-  { id: 'chrome', name: 'Chrome Koruması', summary: 'iOS tarayıcı kapsamı doğrulanmalı.', state: 'NOT_CONFIGURED', coverage: 'Chrome için henüz canlı koruma yok.' },
+  {
+    id: 'chrome',
+    name: 'Chrome Koruması',
+    summary: 'iOS Share Extension hedefi uygulamaya gömülü; imzalı fiziksel-iPhone kabul testi bekliyor.',
+    state: 'NOT_CONFIGURED',
+    coverage: 'Chrome veya başka bir iOS uygulamasındaki bağlantı ve düz metin, yalnızca siz paylaşım menüsünden “n0scam ile İncele”yi seçip Analiz Et’e dokunduğunuzda cihazda değerlendirilir.',
+    setupSteps: [
+      'İmzalı geliştirme sürümünü fiziksel iPhone’a kurun.',
+      'Chrome’da bir bağlantının Paylaş menüsünü açıp “n0scam ile İncele”yi seçin.',
+      'Analiz Et’e dokunup hem riskli hem meşru örneklerde sonucu ve son çalışma sinyalini doğrulayın.',
+    ],
+  },
   {
     id: 'sms',
     name: 'Mesaj Koruması',
@@ -41,14 +52,17 @@ export const protectionModules: ProtectionModule[] = [
 
 export const stateLabel = { NOT_CONFIGURED: 'Kurulum gerekli', PERMISSION_REQUIRED: 'İzin gerekli', NOT_SUPPORTED: 'Henüz desteklenmiyor' } as const;
 
-const smsHeartbeatFreshnessMs = 30 * 24 * 60 * 60 * 1000;
+const extensionHeartbeatFreshnessMs = 30 * 24 * 60 * 60 * 1000;
 
-export function parseSmsHeartbeat(raw: string | null, now = Date.now()) {
+function parseExtensionHeartbeat(raw: string | null, now = Date.now()) {
   if (!raw) return null;
   const lastEvaluatedAt = Number(raw);
   if (!Number.isSafeInteger(lastEvaluatedAt) || lastEvaluatedAt <= 0 || lastEvaluatedAt > now + 5 * 60 * 1000) return null;
-  return { lastEvaluatedAt, fresh: now - lastEvaluatedAt <= smsHeartbeatFreshnessMs };
+  return { lastEvaluatedAt, fresh: now - lastEvaluatedAt <= extensionHeartbeatFreshnessMs };
 }
+
+export function parseSmsHeartbeat(raw: string | null, now = Date.now()) { return parseExtensionHeartbeat(raw, now); }
+export function parseShareHeartbeat(raw: string | null, now = Date.now()) { return parseExtensionHeartbeat(raw, now); }
 
 type MailHealthStatus =
   | null

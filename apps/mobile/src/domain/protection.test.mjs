@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { getMailConnectionHealth, parseSafariExtensionState, parseSmsHeartbeat, protectionModules } from './protection.ts';
+import { getMailConnectionHealth, parseSafariExtensionState, parseShareHeartbeat, parseSmsHeartbeat, protectionModules } from './protection.ts';
 
 test('keeps protection modules in the approved UI order', () => {
   assert.deepEqual(
@@ -14,12 +14,19 @@ test('never presents an unverified protection module as active', () => {
 });
 
 test('provides physical-device setup gates for implemented iOS extensions', () => {
-  for (const id of ['safari', 'sms']) {
+  for (const id of ['safari', 'chrome', 'sms']) {
     const module = protectionModules.find((candidate) => candidate.id === id);
     assert.ok(module);
     assert.ok(module.setupSteps?.length >= 3);
     assert.equal(module.state, 'NOT_CONFIGURED');
   }
+});
+
+test('accepts only bounded, recent share-extension heartbeat timestamps', () => {
+  const now = Date.UTC(2026, 9, 17);
+  assert.deepEqual(parseShareHeartbeat(String(now - 5_000), now), { lastEvaluatedAt: now - 5_000, fresh: true });
+  assert.equal(parseShareHeartbeat(String(now - 31 * 24 * 60 * 60 * 1000), now)?.fresh, false);
+  assert.equal(parseShareHeartbeat('https://private.example/path', now), null);
 });
 
 test('accepts only bounded, recent SMS extension heartbeat timestamps', () => {
