@@ -51,6 +51,16 @@
 4. Disabling the setting cancels every matching scheduled reminder. No push
    registration or notification backend is used for this feature.
 
+## Privacy-safe report sharing
+
+1. The user explicitly opens the system share sheet from an analysis result.
+2. The generated summary contains the risk label, signal titles, and suggested
+   next steps. For web links it includes only the normalized hostname.
+3. Raw messages, full URL paths and query parameters, and non-web QR payloads
+   are never placed in the shared report.
+4. The destination is selected and controlled by the operating-system share
+   sheet; n0scam does not silently send or persist the report.
+
 ## Future email connector
 
 OAuth PKCE starts from mobile, tokens terminate at the backend vault, provider webhooks enqueue a minimal event, and the backend retrieves only the fields required for analysis. Raw content is deleted according to the approved retention policy.

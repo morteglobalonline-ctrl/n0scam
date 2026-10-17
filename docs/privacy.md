@@ -25,5 +25,8 @@
 - The optional weekly protection reminder is scheduled locally by the operating
   system. It does not register a push token or include user content in its
   notification payload.
+- Shared analysis summaries are generated only after an explicit tap. They omit
+  raw message bodies, full URL paths and query parameters, and non-web QR
+  payloads; the operating-system share sheet controls the destination.
 
 The current MVP performs its preliminary URL heuristics on device and does not include production analytics or a remote risk service.
