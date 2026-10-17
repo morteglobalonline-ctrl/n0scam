@@ -28,5 +28,7 @@
 - Shared analysis summaries are generated only after an explicit tap. They omit
   raw message bodies, full URL paths and query parameters, and non-web QR
   payloads; the operating-system share sheet controls the destination.
+- History can be cleared in one confirmed action. Shared history summaries use
+  only the redacted records already stored on-device and never recover raw input.
 
 The current MVP performs its preliminary URL heuristics on device and does not include production analytics or a remote risk service.

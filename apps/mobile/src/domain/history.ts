@@ -32,3 +32,23 @@ export function historyKindForResult(kind: string): HistoryKind {
   if (kind === 'EMAIL') return 'EMAIL';
   return 'LINK';
 }
+
+const reportKindLabel: Record<HistoryKind, string> = { LINK: 'Link', QR: 'QR', MESSAGE: 'Mesaj', EMAIL: 'E-posta' };
+const reportVerdictLabel: Record<HistoryRecord['verdict'], string> = { BLOCK: 'Yüksek risk', WARN: 'Dikkat', UNKNOWN: 'Doğrulanamadı' };
+
+export function buildShareableHistoryReport(records: readonly HistoryRecord[], filterLabel = 'Tümü') {
+  const rows = records.map((record) => {
+    const timestamp = new Date(record.createdAt).toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'short' });
+    return `• ${timestamp} · ${reportKindLabel[record.kind]} · ${record.label} · ${reportVerdictLabel[record.verdict]} · ${record.evidenceCount} işaret`;
+  });
+  return [
+    'n0scam geçmiş özeti',
+    `Filtre: ${filterLabel}`,
+    `Kayıt sayısı: ${records.length}`,
+    '',
+    ...rows,
+    '',
+    'Ham mesajlar, tam bağlantılar ve QR yükleri bu özete eklenmemiştir.',
+    'Sonuçlar analitiktir, tavsiye değildir.',
+  ].join('\n');
+}

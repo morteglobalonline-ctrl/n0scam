@@ -41,6 +41,9 @@
 3. URL records retain only the hostname. Message records use a generic label; message bodies and non-URL QR payloads are not stored.
 4. Risk state, evidence count, type, and timestamp remain in the app sandboxed SQLite database.
 5. The store keeps at most 200 records and each record can be removed through an explicit destructive confirmation.
+6. The user can clear every local summary through a second destructive
+   confirmation. A shared history summary is generated only on request and uses
+   the already-redacted labels; the system share sheet controls its destination.
 
 ## Local protection reminder
 

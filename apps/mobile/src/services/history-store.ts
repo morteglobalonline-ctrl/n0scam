@@ -64,3 +64,7 @@ export async function deleteHistoryRecord(db: SQLiteDatabase, id: number) {
   if (!Number.isSafeInteger(id) || id <= 0) return;
   await db.runAsync('DELETE FROM analysis_history WHERE id = ?', id);
 }
+
+export async function clearHistoryRecords(db: SQLiteDatabase) {
+  await db.runAsync('DELETE FROM analysis_history');
+}

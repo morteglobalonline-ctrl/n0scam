@@ -51,6 +51,8 @@ const androidIcons: Record<string, MaterialName> = {
   'shield.fill': 'shield',
   'shield.slash.fill': 'gpp-bad',
   'square.and.arrow.down.fill': 'download',
+  'square.and.arrow.up': 'share',
+  'trash.fill': 'delete',
   viewfinder: 'center-focus-strong',
   xmark: 'close',
 };
