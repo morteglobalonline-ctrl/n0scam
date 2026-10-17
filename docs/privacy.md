@@ -37,5 +37,8 @@
 - The iOS Share Extension writes only its last successful analysis timestamp to
   App Group storage. Shared text, URLs, source-app identity, signal count, and
   result are never persisted there.
+- Links discovered in message, OCR, or document text are extracted locally and
+  never opened automatically. The result UI reveals only their hostname until
+  the user explicitly starts a separate link analysis.
 
 The current MVP performs its preliminary URL heuristics on device and does not include production analytics or a remote risk service.

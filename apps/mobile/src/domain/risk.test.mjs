@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { analyzeMessage, analyzeUrl, normalizeUrl } from './risk.ts';
+import { analyzeMessage, analyzeUrl, extractWebLinks, normalizeUrl } from './risk.ts';
 
 test('normalizes a bare host to https', () => {
   assert.equal(normalizeUrl('example.com/path').toString(), 'https://example.com/path');
@@ -46,4 +46,18 @@ test('finds urgency, credentials, and payment pressure in a message', () => {
   const result = analyzeMessage('ACİL: Hesabınız kapanacak. Doğrulama kodunu gönderip IBAN üzerinden ödeme yapın.');
   assert.equal(result.verdict, 'BLOCK');
   assert.equal(result.severity, 'HIGH');
+});
+
+test('extracts bounded unique web links without accepting other schemes', () => {
+  const links = extractWebLinks('Bak: https://Example.com/login?x=1, tekrar https://Example.com/login?x=1. ara tel:+90555 veya file:///private. Son: http://test.example/path!');
+  assert.deepEqual(links, [
+    { url: 'https://example.com/login?x=1', hostname: 'example.com' },
+    { url: 'http://test.example/path', hostname: 'test.example' },
+  ]);
+});
+
+test('caps message link extraction before UI routing', () => {
+  const raw = Array.from({ length: 8 }, (_, index) => `https://host${index}.example/path`).join(' ');
+  assert.equal(extractWebLinks(raw).length, 5);
+  assert.deepEqual(extractWebLinks(raw, 0), []);
 });

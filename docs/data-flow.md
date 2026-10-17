@@ -64,6 +64,16 @@
 4. The destination is selected and controlled by the operating-system share
    sheet; n0scam does not silently send or persist the report.
 
+## Links discovered in messages
+
+1. Message, e-mail, OCR, and document text is scanned locally for at most five
+   unique HTTP(S) links. Other schemes and malformed or oversized candidates are
+   discarded.
+2. Only hostnames are shown in the message result. A full address is passed to
+   the existing link analyzer only after the user explicitly taps Analyze.
+3. A discovered link is never opened automatically and is not added to history
+   unless the user separately chooses to save its resulting summary.
+
 ## Local account and support controls
 
 1. Account and Data reads only the on-device history count and local reminder

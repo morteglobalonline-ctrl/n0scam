@@ -73,3 +73,24 @@ export function analyzeMessage(raw: string): LocalAssessment {
   const score = evidence.length;
   return { inputType: 'MESSAGE', displayValue: text, verdict: score >= 3 ? 'BLOCK' : score >= 1 ? 'WARN' : 'UNKNOWN', severity: score >= 3 ? 'HIGH' : score >= 1 ? 'MEDIUM' : 'LOW', evidence: evidence.length ? evidence : [{ title: 'Belirgin dil sinyali bulunmadı', detail: 'Gönderen ve bağlantı doğrulanmadan güvenli kabul edilemez.' }], missingData: ['Gönderen kimliği', 'Bağlantı itibarı', 'Mesajın tam bağlamı'], actions: ['Göndereni başka bir kanaldan doğrula', 'OTP veya şifre paylaşma', 'Ödeme talebini resmi kanaldan kontrol et'] };
 }
+
+export function extractWebLinks(raw: string, limit = 5) {
+  if (!Number.isSafeInteger(limit) || limit <= 0) return [];
+  const matches = raw.slice(0, 5_000).match(/https?:\/\/[^\s<>"']+/gi) ?? [];
+  const links: { url: string; hostname: string }[] = [];
+  const seen = new Set<string>();
+  for (const match of matches) {
+    const candidate = match.replace(/[),.;!?\]}]+$/g, '');
+    if (!candidate || candidate.length > 2_048) continue;
+    try {
+      const parsed = new URL(candidate);
+      if (!['http:', 'https:'].includes(parsed.protocol) || !parsed.hostname || seen.has(parsed.href)) continue;
+      seen.add(parsed.href);
+      links.push({ url: parsed.href, hostname: parsed.hostname.toLowerCase() });
+      if (links.length >= limit) break;
+    } catch {
+      // Malformed candidates are ignored rather than opened or normalized.
+    }
+  }
+  return links;
+}
