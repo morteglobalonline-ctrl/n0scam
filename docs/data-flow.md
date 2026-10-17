@@ -64,6 +64,16 @@
 4. The destination is selected and controlled by the operating-system share
    sheet; n0scam does not silently send or persist the report.
 
+## Local account and support controls
+
+1. Account and Data reads only the on-device history count and local reminder
+   state. A confirmed reset deletes those two local data sets without claiming
+   to delete a server account that does not exist.
+2. Connected Accounts displays Gmail and Outlook as connected only when the
+   connector API returns a valid, fresh health state.
+3. The incident-help summary contains a fixed emergency checklist and no user
+   message, URL, account number, device identifier, or analysis payload.
+
 ## Future email connector
 
 OAuth PKCE starts from mobile, tokens terminate at the backend vault, provider webhooks enqueue a minimal event, and the backend retrieves only the fields required for analysis. Raw content is deleted according to the approved retention policy.

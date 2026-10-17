@@ -6,7 +6,10 @@ import { N0Text } from '@/components/n0-text';
 import { Screen } from '@/components/screen';
 import { StatusPill } from '@/components/status-pill';
 import { Surface } from '@/components/surface';
+import AccountSettingsScreen from '@/screens/account-settings-screen';
+import ConnectedAccountsScreen from '@/screens/connected-accounts-screen';
 import NotificationSettingsScreen from '@/screens/notification-settings-screen';
+import SupportScreen from '@/screens/support-screen';
 import { colors, radius } from '@/theme';
 
 const details = {
@@ -20,7 +23,10 @@ const details = {
 
 export default function SettingDetailScreen() {
   const { id } = useLocalSearchParams<{ id?: string }>();
+  if (id === 'account') return <AccountSettingsScreen />;
+  if (id === 'connections') return <ConnectedAccountsScreen />;
   if (id === 'notifications') return <NotificationSettingsScreen />;
+  if (id === 'support') return <SupportScreen />;
   const detail = details[id && id in details ? id as keyof typeof details : 'about'];
   return <Screen>
     <View style={{ alignItems: 'center', gap: 7, paddingTop: 12 }}><View style={{ width: 54, height: 54, borderRadius: radius.full, backgroundColor: colors.brandWash, borderWidth: 1, borderColor: colors.brand, alignItems: 'center', justifyContent: 'center' }}><N0Symbol name={detail.icon} size={25} /></View><N0Text variant="title">{detail.title}</N0Text><N0Text variant="small" style={{ textAlign: 'center', maxWidth: 310 }}>{detail.description}</N0Text></View>

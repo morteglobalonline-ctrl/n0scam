@@ -10,7 +10,7 @@ const principles = [
   ['Cihazda ön değerlendirme', 'Bu MVP’de URL ve mesaj kuralları cihaz üzerinde çalışır.'],
   ['Otomatik paylaşım yok', 'QR kodu veya bağlantı açık onayın olmadan çalıştırılmaz.'],
   ['Şeffaf durum', 'Doğrulanmamış entegrasyonlar aktif gösterilmez.'],
-  ['Silme hakkı', 'Canlı hesap sistemi eklenmeden önce veri ve hesap silme akışı tamamlanacaktır.'],
+  ['Silme hakkı', 'Yerel analiz geçmişi tek tek, topluca veya Hesap ve Veriler ekranından temizlenebilir.'],
 ];
 
 export default function PrivacyScreen() {

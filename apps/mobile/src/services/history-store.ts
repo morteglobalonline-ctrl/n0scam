@@ -68,3 +68,8 @@ export async function deleteHistoryRecord(db: SQLiteDatabase, id: number) {
 export async function clearHistoryRecords(db: SQLiteDatabase) {
   await db.runAsync('DELETE FROM analysis_history');
 }
+
+export async function countHistoryRecords(db: SQLiteDatabase) {
+  const result = await db.getFirstAsync<{ count: number }>('SELECT COUNT(*) AS count FROM analysis_history');
+  return result?.count ?? 0;
+}

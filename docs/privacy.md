@@ -30,5 +30,9 @@
   payloads; the operating-system share sheet controls the destination.
 - History can be cleared in one confirmed action. Shared history summaries use
   only the redacted records already stored on-device and never recover raw input.
+- Account and Data can clear all current local summaries and scheduled reminders
+  together. It does not pretend to delete a remote account when none exists.
+- The incident-help checklist is fixed, content-free text. Sharing it never adds
+  a message, URL, mailbox item, account number, or device identifier.
 
 The current MVP performs its preliminary URL heuristics on device and does not include production analytics or a remote risk service.

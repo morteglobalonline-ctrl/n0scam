@@ -9,7 +9,7 @@ import { colors, radius } from '@/theme';
 
 const rows = [
   { id: 'subscription', title: 'Hesap ve Abonelik', detail: 'Ücretsiz geliştirme sürümü', icon: 'person.crop.square' as const, route: '/pro' as const },
-  { id: 'connections', title: 'Bağlı Hesaplar', icon: 'person.2.fill' as const, route: '/protection' as const },
+  { id: 'connections', title: 'Bağlı Hesaplar', icon: 'person.2.fill' as const, route: null },
   { id: 'privacy', title: 'Gizlilik ve Güvenlik', icon: 'lock.shield.fill' as const, route: '/privacy' as const },
   { id: 'notifications', title: 'Bildirim Ayarları', icon: 'bell.fill' as const, route: null },
   { id: 'language', title: 'Uygulama Dili', value: 'Türkçe', icon: 'globe' as const, route: null },

@@ -51,7 +51,7 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --test src/domain/history.test.mjs src/domain/intake.test.mjs src/domain/notifications.test.mjs src/domain/protection.test.mjs src/domain/risk.test.mjs src/domain/share-report.test.mjs src/services/connector-api.test.mjs src/services/document-text.test.mjs src/services/risk-api.test.mjs"
+    "test": "node --experimental-strip-types --test src/domain/history.test.mjs src/domain/intake.test.mjs src/domain/notifications.test.mjs src/domain/protection.test.mjs src/domain/risk.test.mjs src/domain/share-report.test.mjs src/domain/support.test.mjs src/services/connector-api.test.mjs src/services/document-text.test.mjs src/services/risk-api.test.mjs"
   },
   "private": true
 }
