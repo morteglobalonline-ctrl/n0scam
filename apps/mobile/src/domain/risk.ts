@@ -59,6 +59,21 @@ export function analyzeUrl(raw: string, inputType: 'URL' | 'QR' = 'URL'): LocalA
   };
 }
 
+export function analyzeQrContent(raw: string): LocalAssessment {
+  try { return analyzeUrl(raw, 'QR'); } catch { /* Continue with non-web QR classification. */ }
+  const value = raw.trim().slice(0, 5_000);
+  const upper = value.toUpperCase();
+  const common = { inputType: 'QR' as const, displayValue: value, missingData: ['Kaynak kimliği', 'Hedef işlemin gerçek bağlamı'] };
+  if (/^OTPAUTH:\/\//i.test(value)) return { ...common, verdict: 'WARN', severity: 'MEDIUM', evidence: [{ title: 'Kimlik doğrulama anahtarı', detail: 'QR içeriği bir doğrulayıcı hesabına gizli anahtar eklemeyi deneyebilir.' }], actions: ['Kodu yalnızca kurulumu sizin başlattığınız resmi hizmette kullanın', 'QR görüntüsünü veya anahtarı kimseyle paylaşmayın'] };
+  if (upper.startsWith('WIFI:')) return { ...common, verdict: 'UNKNOWN', severity: 'LOW', evidence: [{ title: 'Wi-Fi yapılandırma kodu', detail: 'Kod bir ağ adı ve bağlantı ayarı içerebilir; ağa otomatik bağlanılmadı.' }], actions: ['Ağ adını ve sahibini bağımsız doğrulayın', 'Tanımadığınız bir ağa bağlanmayın'] };
+  if (upper.startsWith('BEGIN:VCARD') || upper.startsWith('MECARD:')) return { ...common, verdict: 'UNKNOWN', severity: 'LOW', evidence: [{ title: 'Kişi kartı', detail: 'Kod kişi bilgileri içerebilir; rehbere otomatik eklenmedi.' }], actions: ['Ad, numara ve kuruluşu kaydetmeden önce doğrulayın', 'Beklenmeyen bağlantı veya not alanlarına dikkat edin'] };
+  if (/^(MAILTO:|MATMSG:)/i.test(value)) return { ...common, verdict: 'UNKNOWN', severity: 'LOW', evidence: [{ title: 'E-posta eylemi', detail: 'Kod alıcı, konu veya hazır mesaj içerebilir; e-posta oluşturulmadı.' }], actions: ['Alıcı adresini bağımsız doğrulayın', 'Hazır metindeki ödeme veya bilgi taleplerini kontrol edin'] };
+  if (/^(TEL:|SMS:|SMSTO:|MMSTO:)/i.test(value)) return { ...common, verdict: 'UNKNOWN', severity: 'LOW', evidence: [{ title: 'Arama veya mesaj eylemi', detail: 'Kod bir numara ve hazır mesaj içerebilir; arama veya gönderim başlatılmadı.' }], actions: ['Numarayı resmi kaynaktan doğrulayın', 'Doğrulama kodu veya ödeme bilgisi göndermeyin'] };
+  if (/^(GEO:|BEGIN:VEVENT)/i.test(value)) return { ...common, verdict: 'UNKNOWN', severity: 'LOW', evidence: [{ title: 'Konum veya etkinlik içeriği', detail: 'Kod konum ya da takvim bilgisi içerebilir; başka uygulamaya aktarılmadı.' }], actions: ['Konumu veya daveti kaynağından doğrulayın', 'Beklenmeyen ekleri veya talimatları açmayın'] };
+  if (/^[a-z][a-z\d+.-]*:/i.test(value)) return { ...common, verdict: 'WARN', severity: 'MEDIUM', evidence: [{ title: 'Özel uygulama bağlantısı', detail: 'Kod bir uygulama eylemi çalıştırabilecek web dışı şema içeriyor; eylem başlatılmadı.' }], actions: ['Şemanın hangi uygulamaya ait olduğunu doğrulayın', 'Kaynağını bilmiyorsanız içeriği çalıştırmayın'] };
+  return { ...common, verdict: 'UNKNOWN', severity: 'LOW', evidence: [{ title: 'Düz metin QR içeriği', detail: 'Kod web bağlantısı olmayan metin içeriyor; metin başka uygulamaya aktarılmadı.' }], actions: ['Metindeki talebi kaynağından doğrulayın', 'Şifre, kart veya doğrulama kodu paylaşmayın'] };
+}
+
 export function analyzeMessage(raw: string): LocalAssessment {
   const text = raw.trim();
   if (text.length < 8) throw new Error('Analiz için daha uzun bir mesaj gir.');

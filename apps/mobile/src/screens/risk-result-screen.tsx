@@ -9,14 +9,15 @@ import { N0Text } from '@/components/n0-text';
 import { Screen } from '@/components/screen';
 import { Surface } from '@/components/surface';
 import { historyKindForResult } from '@/domain/history';
-import { analyzeMessage, analyzeUrl, extractWebLinks, type LocalAssessment } from '@/domain/risk';
+import { analyzeMessage, analyzeQrContent, analyzeUrl, extractWebLinks, type LocalAssessment } from '@/domain/risk';
 import { buildShareableRiskReport } from '@/domain/share-report';
 import { saveHistoryRecord } from '@/services/history-store';
 import { colors, radius, shadows } from '@/theme';
 
 function createAssessment(kind: string, value: string): LocalAssessment {
   if (kind === 'MESSAGE') return analyzeMessage(value);
-  try { return analyzeUrl(value, kind === 'QR' ? 'QR' : 'URL'); } catch { return { inputType: 'QR', displayValue: value, verdict: 'UNKNOWN', severity: 'LOW', evidence: [{ title: 'URL olmayan QR içeriği', detail: 'İçerik otomatik çalıştırılmadı veya başka bir uygulamaya aktarılmadı.' }], missingData: ['İçerik türüne özel doğrulama'], actions: ['İçeriği çalıştırmadan önce kaynağını doğrulayın', 'Ödeme veya Wi-Fi bilgilerini bağımsız kontrol edin'] }; }
+  if (kind === 'QR') return analyzeQrContent(value);
+  return analyzeUrl(value);
 }
 
 function iconForEvidence(title: string) {

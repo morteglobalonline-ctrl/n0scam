@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { analyzeMessage, analyzeUrl, extractWebLinks, normalizeUrl } from './risk.ts';
+import { analyzeMessage, analyzeQrContent, analyzeUrl, extractWebLinks, normalizeUrl } from './risk.ts';
 
 test('normalizes a bare host to https', () => {
   assert.equal(normalizeUrl('example.com/path').toString(), 'https://example.com/path');
@@ -60,4 +60,17 @@ test('caps message link extraction before UI routing', () => {
   const raw = Array.from({ length: 8 }, (_, index) => `https://host${index}.example/path`).join(' ');
   assert.equal(extractWebLinks(raw).length, 5);
   assert.deepEqual(extractWebLinks(raw, 0), []);
+});
+
+test('classifies non-web QR payloads without executing their actions', () => {
+  assert.equal(analyzeQrContent('WIFI:T:WPA;S:Cafe;P:secret;;').evidence[0].title, 'Wi-Fi yapılandırma kodu');
+  assert.equal(analyzeQrContent('mailto:test@example.com?subject=Hello').evidence[0].title, 'E-posta eylemi');
+  assert.equal(analyzeQrContent('tel:+905551112233').evidence[0].title, 'Arama veya mesaj eylemi');
+  assert.equal(analyzeQrContent('BEGIN:VCARD\nFN:Example\nEND:VCARD').evidence[0].title, 'Kişi kartı');
+});
+
+test('warns on OTP secrets and unknown app schemes in QR codes', () => {
+  assert.equal(analyzeQrContent('otpauth://totp/example?secret=PRIVATE').verdict, 'WARN');
+  assert.equal(analyzeQrContent('bankapp://transfer?amount=100').verdict, 'WARN');
+  assert.equal(analyzeQrContent('https://example.com').inputType, 'QR');
 });

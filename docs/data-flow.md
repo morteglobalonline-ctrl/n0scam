@@ -74,6 +74,16 @@
 3. A discovered link is never opened automatically and is not added to history
    unless the user separately chooses to save its resulting summary.
 
+## Non-web QR payloads
+
+1. A scanned QR payload is first checked as HTTP(S). If it is not a web link,
+   the app locally distinguishes Wi-Fi, contact card, mail, phone/message,
+   location/event, authenticator-secret, custom-app scheme, and plain text.
+2. None of those payloads connect to a network, add a contact, compose or send a
+   message, place a call, open another app, or enroll an authenticator.
+3. Authenticator secrets and unknown custom schemes receive an elevated caution;
+   other types remain unverified and show type-specific safe next steps.
+
 ## Local account and support controls
 
 1. Account and Data reads only the on-device history count and local reminder
