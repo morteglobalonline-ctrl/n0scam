@@ -42,6 +42,15 @@
 4. Risk state, evidence count, type, and timestamp remain in the app sandboxed SQLite database.
 5. The store keeps at most 200 records and each record can be removed through an explicit destructive confirmation.
 
+## Local protection reminder
+
+1. The user explicitly enables a weekly reminder in Notification Settings.
+2. The operating system schedules one local notification for Monday at 10:00.
+3. Its payload contains only a fixed internal reminder kind. It never contains a
+   URL, message, mailbox item, risk result, account identifier, or device token.
+4. Disabling the setting cancels every matching scheduled reminder. No push
+   registration or notification backend is used for this feature.
+
 ## Future email connector
 
 OAuth PKCE starts from mobile, tokens terminate at the backend vault, provider webhooks enqueue a minimal event, and the backend retrieves only the fields required for analysis. Raw content is deleted according to the approved retention policy.

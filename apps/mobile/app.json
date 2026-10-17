@@ -21,7 +21,7 @@
         "CADisableMinimumFrameDurationOnPhone": true,
         "ITSAppUsesNonExemptEncryption": false,
         "NSCameraUsageDescription": "n0scam, QR kodunu cihazında çözümlemek ve hedefi açmadan önce göstermek için kamerayı kullanır.",
-        "NSPhotoLibraryUsageDescription": "n0scam, seçtiğin görseldeki QR kodunu incelemek için fotoğraf erişimi ister."
+        "NSPhotoLibraryUsageDescription": "n0scam, seçtiğin görseldeki QR kodunu veya şüpheli metni cihazında incelemek için fotoğraf erişimi ister."
       }
     },
     "android": {
@@ -64,10 +64,11 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "n0scam, seçtiğin görseldeki QR kodunu incelemek için fotoğraf erişimi ister.",
+          "photosPermission": "n0scam, seçtiğin görseldeki QR kodunu veya şüpheli metni cihazında incelemek için fotoğraf erişimi ister.",
           "microphonePermission": false
         }
       ],
+      "expo-notifications",
       "@bacons/apple-targets",
       "expo-sqlite"
     ],

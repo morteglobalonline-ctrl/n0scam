@@ -13,7 +13,7 @@ Status: initial technical assessment. No entitlement or store approval is assume
 | Unknown-sender SMS/MMS | IdentityLookup Message Filter Extension | App extension, App Group, provisioning, Settings enablement, false-positive review | Conservative local CNG/EAS target plus content-free execution heartbeat implemented; physical-device acceptance pending | Last execution may be verified, but enablement is not claimed |
 | Gmail | OAuth PKCE + Gmail API watch backend | Restricted-scope verification | Mobile PKCE/status/revoke flow implemented; connector backend and Google OAuth client not configured | Connection service required |
 | Outlook | OAuth PKCE + Graph subscriptions backend | Entra app + webhook backend | Mobile PKCE/status/revoke flow implemented; connector backend and Entra app not configured | Connection service required |
-| Notifications | APNs through Expo Notifications | User permission + backend | Not configured | Off |
+| Notifications | Local scheduling now; APNs later for verified remote events | User permission; backend only for future remote events | Opt-in weekly local protection reminder implemented | Off until user enables it |
 
 ## iOS-first proof gates
 

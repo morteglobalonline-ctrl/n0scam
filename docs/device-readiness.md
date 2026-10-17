@@ -87,5 +87,10 @@ Expo Go is not an acceptance environment for the native-extension work. Those ta
   recognized the fixture's real Turkish UI and sample-message text. The desktop
   automation could not complete the final child-scene tap, so selecting that
   fixture through the app remains part of the physical-device acceptance pass.
+- Notification Settings now exposes an opt-in weekly local reminder backed by
+  the operating-system scheduler. It requests alert-only permission, stores no
+  push token or user content, cancels duplicate schedules, and routes a reminder
+  tap to the Protection screen. Physical-device delivery and denied-permission
+  recovery remain acceptance checks.
 
 Simulator registration proves packaging and target discovery, not real protection. Signed physical-iPhone enablement, unknown-sender message fixtures, Safari permission prompts, and false-positive review remain required.
